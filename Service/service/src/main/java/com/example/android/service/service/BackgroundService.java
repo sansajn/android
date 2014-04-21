@@ -8,6 +8,9 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 //@ Implementacia servisu.
 public class BackgroundService extends Service {
 
@@ -15,7 +18,7 @@ public class BackgroundService extends Service {
 	public void onCreate() {
 		super.onCreate();
 		Log.v(TAG, "onCreate()");
-		notificationMgr = (NotificationManager)getSystemService(
+		_notificationMan = (NotificationManager)getSystemService(
 			NOTIFICATION_SERVICE);
 		displayNotificationMessage("Background service is running");
 	}
@@ -28,8 +31,7 @@ public class BackgroundService extends Service {
 		Log.v(TAG,
 			"onStartCommad(), counter=" + counter + ", startId=" + startId);
 
-		new Thread(myThreads,
-			new ServiceWorker(counter), "BackgroundService").start();
+		_pool.submit(new ServiceWorker(counter));
 
 		return START_STICKY;
 	}
@@ -38,8 +40,8 @@ public class BackgroundService extends Service {
 	public void onDestroy() {
 		Log.v(TAG,
 			"onDestroy() Interrupting threads and cancelling notifications");
-		myThreads.interrupt();
-		notificationMgr.cancelAll();
+		_pool.shutdownNow();
+		_notificationMan.cancelAll();
 		super.onDestroy();
 	}
 
@@ -61,13 +63,13 @@ public class BackgroundService extends Service {
 			.setSmallIcon(R.drawable.emo_im_winking)
 			.build();
 
-		notificationMgr.notify(0, notification);
+		_notificationMan.notify(0, notification);
 	}
 
 	class ServiceWorker implements Runnable {
 
 		public ServiceWorker(int counter) {
-			this.counter = counter;
+			_counter = counter;
 		}
 
 		@Override
@@ -76,18 +78,18 @@ public class BackgroundService extends Service {
 				"ServiceWorker:" + Thread.currentThread().getId();
 			try {
 				Log.v(TAG2,
-					"sleeping for 10 seconds. counter=" + counter);
+					"sleeping for 10 seconds, counter=" + _counter);
 				Thread.sleep(10000);
-				Log.v(TAG2, "... waking up");
+				Log.v(TAG2, "... waking up, counter=" + _counter);
 			} catch (InterruptedException e) {
-				Log.v(TAG2, "... sleep interrupted");
+				Log.v(TAG2, "... sleep interrupted, counter=" + _counter);
 			}
 		}
 
-		private int counter = -1;
+		private int _counter = -1;
 	}
 
 	private static final String TAG = "BackgroundService";
-	private NotificationManager notificationMgr;
-	private ThreadGroup myThreads = new ThreadGroup("ServiceWorker");
+	private NotificationManager _notificationMan;
+	private ExecutorService _pool = Executors.newSingleThreadExecutor();
 }
