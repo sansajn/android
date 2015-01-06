@@ -9,6 +9,9 @@ import android.view.MenuItem;
 public class OpenGLWindowActivity extends Activity {
 	@Override protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		Android.mainActivity = this;
+
 		_glview = new MyGLSurface(this);
 		setContentView(_glview);
 	}

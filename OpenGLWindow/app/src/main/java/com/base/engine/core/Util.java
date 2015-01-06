@@ -1,4 +1,4 @@
-package com.example.opengltest.app;
+package com.base.engine.core;
 
 import com.base.engine.rendering.Vertex;
 
@@ -6,6 +6,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
 
 public class Util {
 	public static IntBuffer createBuffer(int[] value) {
@@ -44,5 +45,29 @@ public class Util {
 
 	public static FloatBuffer createFloatBuffer(int size) {
 		return ByteBuffer.allocateDirect(size).order(ByteOrder.nativeOrder()).asFloatBuffer();
+	}
+
+	public static ByteBuffer createByteBuffer(int size) {
+		return ByteBuffer.allocateDirect(size).order(ByteOrder.nativeOrder());
+	}
+
+	public static int[] toIntArray(Integer[] data) {
+		int[] result = new int[data.length];
+		for (int i = 0; i < data.length; ++i)
+			result[i] = data[i].intValue();
+		return result;
+	}
+
+	public static String[] removeEmptyStrings(String[] data) {
+		ArrayList<String> result = new ArrayList<String>();
+
+		for (int i = 0; i < data.length; ++i)
+			if (!data[i].equals(""))
+				result.add(data[i]);
+
+		String[] res = new String[result.size()];
+		result.toArray(res);
+
+		return res;
 	}
 }

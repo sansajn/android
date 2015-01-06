@@ -1,10 +1,11 @@
 package com.base.engine.rendering;
 
+import android.util.Log;
 import com.base.engine.core.*;
-import com.example.opengltest.app.Util;
+import com.example.opengltest.app.Android;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 
 import static android.opengl.GLES20.*;
@@ -69,7 +70,6 @@ public class Shader {
 	public void setUniform(String uniformName, Vector3f value) {glUniform3f(uniforms.get(uniformName), value.getX(), value.getY(), value.getZ());}
 
 	public void setUniform(String uniformName, Matrix4f value) {
-//		glUniformMatrix4fv(uniforms.get(uniformName), 1, false, Util.createFlippedBuffer(value));
 		glUniformMatrix4fv(uniforms.get(uniformName), 1, false, value.getAsArray(), 0);
 	}
 
@@ -86,7 +86,9 @@ public class Shader {
 		int[] compileStatus = new int[1];
 		glGetShaderiv(shader, GL_COMPILE_STATUS, compileStatus, 0);
 		if (compileStatus[0] == 0) {
-			System.err.println(glGetShaderInfoLog(shader));
+			String err = glGetShaderInfoLog(shader);
+			System.err.println(err);
+			Log.d("SHADER", err);
 			System.exit(1);
 		}
 
@@ -98,7 +100,9 @@ public class Shader {
 		final String INCLUDE_DIRECTIVE = "#include";
 
 		try {
-			BufferedReader shaderReader = new BufferedReader(new FileReader("./res/shaders/" + filename));
+//			BufferedReader shaderReader = new BufferedReader(new FileReader("./res/shaders/" + filename));
+			BufferedReader shaderReader = new BufferedReader(
+				new InputStreamReader(Android.getAssets().open("shaders/" + filename)));
 
 			String line;
 			while ((line = shaderReader.readLine()) != null) {
