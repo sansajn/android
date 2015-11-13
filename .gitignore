@@ -1,4 +1,7 @@
 .directory
 .gradle/
+.idea/
 OpenGLWindow/
-
+*.so
+*.o
+*.o.d

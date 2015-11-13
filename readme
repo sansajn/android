@@ -4,3 +4,6 @@ Lifecycle
 OpenGLWindow
 Service
 
+ndk/HelloJni : volanie jednoduchej bezparametrickej funkcie
+implementovanej natívnym kódom.
+
