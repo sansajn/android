@@ -1,0 +1,9 @@
+Builduj príkazmi
+
+	$ mkdir build && cd build
+	$ cmake -DCMAKE_TOOLCHAIN_FILE=../x86_android.cmake -DCMAKE_INSTALL_PREFIX=/tmp/x86-android19/sysroot ..
+
+TODO: buildovať do externého adresára sa dá jedným príkazom
+
+	$ cmake --build build -- -j3
+

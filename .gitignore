@@ -2,6 +2,7 @@
 .gradle/
 .idea/
 OpenGLWindow/
+build/
 *.so
 *.o
 *.o.d
