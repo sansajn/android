@@ -7,8 +7,10 @@ Service
 ndk/HelloJni : volanie bezparametrickej funkcie implementovanej v jni
 ndk/CMake : používa cmake (a standalone-toolchain) na miesto ndk-build
 ndk/Cpp11 : c++11 ako natívny kód
-ndk/LoadRes : cez jni prečíta zdroje (assets) s zbalené v apk súbore
+ndk/LoadRes : cez jni prečíta zdroje (assets) zbalené v apk súbore
 ndk/TriangleGles2 : vyrenderuje trojuholník pomocou opengl es 2
-ndk/LoadingPng : čítanie png pomocou libpng (nefunguje)
-ndk/earth
+ndk/LoadingPng : čítanie png pomocou libpng (staticky zlinkovana a
+	predinštalovan= v toolchaine)
+ndk/ReadFile : čítanie s file systemu s jni
+ndk/earth :
 

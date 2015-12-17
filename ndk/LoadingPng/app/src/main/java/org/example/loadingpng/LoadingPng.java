@@ -40,36 +40,6 @@ public class LoadingPng extends ActionBarActivity {
 		rendererSet = true;
 		setContentView(glSurfaceView);
 
-		glSurfaceView.setOnTouchListener(
-			new View.OnTouchListener() {
-				public boolean onTouch(View v, MotionEvent event) {
-					if (event != null) {
-						final float normalizedX = (event.getX() / (float)v.getWidth()) * 2 - 1;
-						final float normalizedY = -((event.getY() / (float)v.getHeight()) * 2 - 1);
-						if (event.getAction() == MotionEvent.ACTION_DOWN) {
-							glSurfaceView.queueEvent(
-								new Runnable() {
-									public void run() {
-										rendererWrapper.handleTouchPress(normalizedX, normalizedY);
-									}
-								});
-						}  // down
-						else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-							glSurfaceView.queueEvent(
-								new Runnable() {
-									public void run() {
-										rendererWrapper.handleTouchDrag(normalizedX, normalizedY);
-									}
-								});
-						}  // move
-
-						return true;
-					}
-					else
-						return false;
-				}  // onTouch
-			});
-
 	}  // onCreate
 
 	private boolean isProbablyEmulator() {
