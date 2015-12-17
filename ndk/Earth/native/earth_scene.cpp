@@ -246,11 +246,11 @@ JNIEXPORT void JNICALL Java_org_example_earth_SceneLib_render(JNIEnv * env, jobj
 }
 
 //! \param event 0 for down, 1 for up, 2 for motion
-JNIEXPORT void JNICALL Java_org_example_earth_SceneLib_touch(JNIEnv * env, jobject thiz, jfloat x, jfloat y, jint event)
+JNIEXPORT void JNICALL Java_org_example_earth_SceneLib_touch(JNIEnv * env, jobject thiz, jfloat x, jfloat y, jint action)
 {
 	joystick::touch_event te;
 
-	switch (event)
+	switch (action)
 	{
 		case 0:
 			te = joystick::touch_event::down;

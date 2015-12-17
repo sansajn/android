@@ -9,19 +9,40 @@ public class SceneLib {
 	public static native void render();
 
 	public static void touch(MotionEvent event) {
-		int eventId;
-		if (event.getAction() == MotionEvent.ACTION_DOWN)
-			eventId = 0;
-		else if (event.getAction() == MotionEvent.ACTION_UP)
-			eventId = 1;
-		else if (event.getAction() == MotionEvent.ACTION_MOVE)
-			eventId = 2;
-		else
-			return;  // ignore other actions
-		touch(event.getX(), event.getY(), eventId);
+
+		// native-action 0:down, 1:up, 2:move
+		if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
+			for (int idx = 0; idx < event.getPointerCount(); ++idx)
+				touch(event.getX(idx), event.getY(idx), 2);  // 2 for move action
+			return;  // we are done
+		}
+
+		int pointerIdx, nativeActionId;
+
+		switch (event.getActionMasked()) {
+			case MotionEvent.ACTION_DOWN:
+				pointerIdx = 0;
+				nativeActionId = 0;
+				break;
+			case MotionEvent.ACTION_UP:
+				pointerIdx = 0;
+				nativeActionId = 1;
+				break;
+			case MotionEvent.ACTION_POINTER_DOWN:
+				pointerIdx = (event.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+				nativeActionId = 0;
+				break;
+			case MotionEvent.ACTION_POINTER_UP:
+				pointerIdx = (event.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+				nativeActionId = 1;
+				break;
+			default: return;  // ignore other actions
+		}
+
+		touch(event.getX(pointerIdx), event.getY(pointerIdx), nativeActionId);
 	}
 
-	private static native void touch(float x, float y, int event);
+	private static native void touch(float x, float y, int action);
 
 	static {
 		System.loadLibrary("scene");
