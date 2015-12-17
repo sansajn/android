@@ -34,13 +34,18 @@ public class MultiTouchDemo1Activity extends Activity implements View.OnTouchLis
 	protected static String describeEvent(MotionEvent event) {
 		StringBuilder result = new StringBuilder(500);
 
+		int pointerIdx;
 		String actionName;
 		switch (event.getActionMasked()) {
 			case MotionEvent.ACTION_DOWN: actionName = "ACTION_DOWN"; break;
 			case MotionEvent.ACTION_UP: actionName = "ACTION_UP";	break;
-			case MotionEvent.ACTION_MOVE:	actionName = "ACTION_MOVE"; break;
-			case MotionEvent.ACTION_POINTER_DOWN: actionName = "ACTION_POINTER_DOWN"; break;
-			case MotionEvent.ACTION_POINTER_UP: actionName = "ACTION_POINTER_UP"; break;
+			case MotionEvent.ACTION_MOVE: actionName = "ACTION_MOVE"; break;
+			case MotionEvent.ACTION_POINTER_DOWN:
+				pointerIdx = (event.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+				actionName = "ACTION_POINTER_DOWN(id:" + event.getPointerId(pointerIdx) + ")"; break;
+			case MotionEvent.ACTION_POINTER_UP:
+				pointerIdx = (event.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+				actionName = "ACTION_POINTER_UP(id:" + event.getPointerId(pointerIdx) + ")"; break;
 			default: actionName = "other";
 		}
 
