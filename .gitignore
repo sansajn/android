@@ -4,5 +4,12 @@
 OpenGLWindow/
 build/
 *.so
+*.a
 *.o
 *.o.d
+
+*.config
+*.creator
+*.creator.user
+*.files
+*.includes

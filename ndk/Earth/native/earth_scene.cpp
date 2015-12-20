@@ -15,7 +15,7 @@
 #include "gl/gles2/touch_joystick_gles2.hpp"
 #include "gl/gles2/default_shader_gles2.hpp"
 
-#define LOG_TAG "scene"
+char const * LOG_TAG = "scene";
 
 using glm::vec4;
 using glm::mat4;
@@ -92,8 +92,10 @@ scene_window::scene_window(int screen_w, int screen_h)
 		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "%s", "scene_window::scene_window(int, int):textures");
 
 		_phong.from_memory(gles2::textured_phong_shader_source);
-		_textured.from_memory(gles2::textured_shader_source);
+		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "%s", "scene_window::scene_window(int, int):phong_shader loaded");
+//		_textured.from_memory(gles2::textured_shader_source);
 		_solid.from_memory(gles2::flat_shader_source);
+		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "%s", "scene_window::scene_window(int, int):solid shader loaded");
 
 		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "%s", "scene_window::scene_window(int, int):programs");
 
@@ -114,6 +116,11 @@ void scene_window::display()
 
 	mat4 world_to_screen = _cam.world_to_screen();
 
+	GLint flat_position_a = glGetAttribLocation(_solid.id(), "position");
+	GLint phong_position_a = glGetAttribLocation(_phong.id(), "position");
+	GLint phong_texcoord_a = glGetAttribLocation(_phong.id(), "texcoord");
+	GLint phong_normal_a = glGetAttribLocation(_phong.id(), "normal");
+
 	// sun
 	auto & sun_prog = _solid;
 	sun_prog.use();
@@ -121,6 +128,7 @@ void scene_window::display()
 	mat4 local_to_screen = world_to_screen * local_to_world;
 	sun_prog.uniform_variable("local_to_screen", local_to_screen);
 	sun_prog.uniform_variable("color", rgb::yellow);
+	_sphere.attribute_location({flat_position_a});
 	_sphere.render();
 	vec4 sun_pos = local_to_world[3];  // <-- toto je dobra finta local_to_world[3] vrati posunutie transformacie
 
@@ -144,9 +152,10 @@ void scene_window::display()
 	_earth_tex.bind(0);
 	earth_prog.uniform_variable("s", 0);
 //	earth_prog.uniform_variable("color", rgb::blue);
+	_sphere.attribute_location({phong_position_a, phong_texcoord_a, phong_normal_a});
 	_sphere.render();
 
-//	// moon
+	// moon
 	auto & moon_prog = _phong;
 //	auto & moon_prog = _textured;
 //	auto & moon_prog = _solid;
