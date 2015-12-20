@@ -26,7 +26,6 @@ note: opengl es2 nepodporuje defaultne hodnoty uniformou */
 char const * flat_shaded_shader_source = R"(
 	#ifdef _VERTEX_
 	attribute vec3 position;
-	attribute vec2 dummy0;
 	attribute vec3 normal;
 	uniform mat4 local_to_screen;
 	uniform mat3 normal_to_world;

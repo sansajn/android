@@ -129,6 +129,11 @@ bool program::used() const
 	return _CURRENT == this;
 }
 
+int program::attribute_location(char const * name) const
+{
+	return glGetAttribLocation(_pid, name);
+}
+
 shared_ptr<uniform> program::uniform_variable(string const & name)
 {
 	auto it = _uniforms.find(name);
@@ -150,7 +155,7 @@ void program::init_uniforms()
 
 	GLint nuniform = 0;
 	glGetProgramiv(_pid, GL_ACTIVE_UNIFORMS, &nuniform);
-	for (GLuint i = 0; i < nuniform; ++i)
+	for (GLuint i = 0; i < (GLuint)nuniform; ++i)
 	{
 		GLint size;
 		GLsizei length;

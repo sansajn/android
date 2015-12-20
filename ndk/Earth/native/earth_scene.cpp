@@ -42,6 +42,9 @@ char const * moon_texture_path = "/sdcard/.earth/moonmap1k.png";
 //char const * moon_texture_path = "/sdcard/.earth/1_earth_1k.png";
 //char const * moon_texture_path = "/sdcard/.earth/moonmap4k.jpg";
 
+constexpr float two_pi = 2.0f*M_PI;
+constexpr unsigned joystick_size = 75;
+
 
 class scene_window
 {
@@ -59,10 +62,11 @@ private:
 	camera _cam;
 	mesh _sphere;
 	texture2d _earth_tex, _moon_tex;
-	program _phong, _textured,_solid;
+	program _phong, _textured, _flat;
 	float _earth_w, _moon_w, _sun_w;
-	float _earth_ang, _moon_ang, _sun_ang;  // angles in radians
-	float const _2pi;
+	float _earth_ang, _moon_ang, _sun_ang;  //!< \note angles in radians
+	int _phong_position_a, _phong_texcoord_a, _phong_normal_a;
+	int _flat_position_a;
 
 public:
 	joystick _move, _look;
@@ -75,32 +79,33 @@ scene_window::scene_window(int screen_w, int screen_h)
 	, _earth_w{radians(5.0f)}
 	, _moon_w{radians(12.5f)}
 	, _sun_w{radians(20.0f)}
-	, _2pi{2*M_PI}
-	, _move{ivec2{100, height()-100}, 50, width(), height()}
-	, _look{ivec2{width()-100, height()-100}, 50, width(), height()}
+	, _move{ivec2{joystick_size+50, height()-joystick_size-50}, joystick_size, width(), height()}
+	, _look{ivec2{width()-joystick_size-50, height()-joystick_size-50}, joystick_size, width(), height()}
 {
 	_cam.position = vec3{0,0,95};
 	_sphere = make_sphere<mesh>(1.0f, 120, 90);
-
-	__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "%s", "scene_window::scene_window(int, int):begin");
 
 	try {
 		auto default_tex_params = texture2d::parameters{}.min(gles2::texture_filter::linear);
 		_earth_tex = texture_from_file(earth_texture_path, default_tex_params);
 		_moon_tex = texture_from_file(moon_texture_path, default_tex_params);
-
-		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "%s", "scene_window::scene_window(int, int):textures");
+		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "%s", "textures loaded");
 
 		_phong.from_memory(gles2::textured_phong_shader_source);
-		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "%s", "scene_window::scene_window(int, int):phong_shader loaded");
-//		_textured.from_memory(gles2::textured_shader_source);
-		_solid.from_memory(gles2::flat_shader_source);
-		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "%s", "scene_window::scene_window(int, int):solid shader loaded");
+		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "  '%s' loaded", "gles2::textured_phong_shader_source");
+		_phong_position_a = _phong.attribute_location("position");
+		_phong_texcoord_a = _phong.attribute_location("texcoord");
+		_phong_normal_a = _phong.attribute_location("normal");
 
-		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "%s", "scene_window::scene_window(int, int):programs");
+		_textured.from_memory(gles2::textured_shader_source);
+		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "  '%s' loaded", "gles2::textured_shaded_shader_source");
+		// TODO: attributes ...
 
+		_flat.from_memory(gles2::flat_shader_source);
+		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "  '%s' loaded", "gles2::flat_shader_source");
+		_flat_position_a = _flat.attribute_location("position");
 	} catch (std::exception & e) {
-		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "%s", e.what());
+		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "exception in scene_window{int, int} detected: %s", e.what());
 	}
 }
 
@@ -116,19 +121,14 @@ void scene_window::display()
 
 	mat4 world_to_screen = _cam.world_to_screen();
 
-	GLint flat_position_a = glGetAttribLocation(_solid.id(), "position");
-	GLint phong_position_a = glGetAttribLocation(_phong.id(), "position");
-	GLint phong_texcoord_a = glGetAttribLocation(_phong.id(), "texcoord");
-	GLint phong_normal_a = glGetAttribLocation(_phong.id(), "normal");
-
 	// sun
-	auto & sun_prog = _solid;
+	auto & sun_prog = _flat;
 	sun_prog.use();
 	mat4 local_to_world = rotate(_sun_ang, vec3{0,-1,0}) * translate(vec3{90, 0, 0});
 	mat4 local_to_screen = world_to_screen * local_to_world;
 	sun_prog.uniform_variable("local_to_screen", local_to_screen);
 	sun_prog.uniform_variable("color", rgb::yellow);
-	_sphere.attribute_location({flat_position_a});
+	_sphere.attribute_location({_flat_position_a});
 	_sphere.render();
 	vec4 sun_pos = local_to_world[3];  // <-- toto je dobra finta local_to_world[3] vrati posunutie transformacie
 
@@ -152,7 +152,7 @@ void scene_window::display()
 	_earth_tex.bind(0);
 	earth_prog.uniform_variable("s", 0);
 //	earth_prog.uniform_variable("color", rgb::blue);
-	_sphere.attribute_location({phong_position_a, phong_texcoord_a, phong_normal_a});
+	_sphere.attribute_location({_phong_position_a, _phong_texcoord_a, _phong_normal_a});
 	_sphere.render();
 
 	// moon
@@ -175,9 +175,9 @@ void scene_window::display()
 
 void scene_window::update(float dt)
 {
-	_sun_ang = fmod(_sun_ang + _sun_w * dt, _2pi);
-	_moon_ang = fmod(_moon_ang + _moon_w * dt, _2pi);
-	_earth_ang = fmod(_earth_ang + _earth_w * dt, _2pi);
+	_sun_ang = fmod(_sun_ang + _sun_w * dt, two_pi);
+	_moon_ang = fmod(_moon_ang + _moon_w * dt, two_pi);
+	_earth_ang = fmod(_earth_ang + _earth_w * dt, two_pi);
 }
 
 void scene_window::input(float dt)
