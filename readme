@@ -1,8 +1,10 @@
-Kolekcia programou testujúcich funkcionalitu androidu.
+Kolekcia programou predvádzajúcich funkcionalitu/api androidu.
 
 Lifecycle
 OpenGLWindow
 Service
+TouchDemo1 : ukážka použitia dotykového displeja
+MultiTouchDemo1 : ukážka použitia viacdotikového displeja
 
 ndk/HelloJni : volanie bezparametrickej funkcie implementovanej v jni
 ndk/CMake : používa cmake (a standalone-toolchain) na miesto ndk-build
@@ -10,7 +12,10 @@ ndk/Cpp11 : c++11 ako natívny kód
 ndk/LoadRes : cez jni prečíta zdroje (assets) zbalené v apk súbore
 ndk/TriangleGles2 : vyrenderuje trojuholník pomocou opengl es 2
 ndk/LoadingPng : čítanie png pomocou libpng (staticky zlinkovana a
-	predinštalovan= v toolchaine)
+	predinštalovana v toolchaine)
+ndk/LoadingJpeg : čítanie jpeg pomocoi libjpeg
 ndk/ReadFile : čítanie s file systemu s jni
-ndk/earth :
+ndk/Shapes : generovanie tvarou pomocou kničnice shapes
+ndk/Earth : sustava zem, mesiac slnko s osvetlenim a texturami
+ndk/ImageMagick : galeria pomocou image-magick-u
 
