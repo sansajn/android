@@ -34,11 +34,12 @@ char const * ortho_image_view_shader_source = R"(
 	uniform mat4 local_to_screen;
 	varying vec2 st;
 	void main() {
-		st = position.xy/2.0f + 0.5f;
+		st = position.xy/2.0 + 0.5;
 		gl_Position = local_to_screen * vec4(position, 1);
 	}
 	#endif
 	#ifdef _FRAGMENT_
+	precision mediump float;
 	uniform sampler2D s;
 	varying vec2 st;
 	void main() {
