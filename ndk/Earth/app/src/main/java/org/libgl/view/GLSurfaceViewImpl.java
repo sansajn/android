@@ -1,34 +1,63 @@
-package org.example.earth;
+package org.libgl.view;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.opengles.GL10;
+import org.libgl.wrapper.NativeScene;
 
-public class TriangleView extends GLSurfaceView {
+public class GLSurfaceViewImpl extends GLSurfaceView {
 
-	public TriangleView(Context context) {
+	public GLSurfaceViewImpl(Context context) {
 		super(context);
+		Log.d(TAG, "GLSurfaceViewImpl()");
 		init();
 	}
 
 	private void init() {
-		getHolder().setFormat(PixelFormat.RGBA_8888);  // by default RGB_565 surface, we want 32bit one
+		getHolder().setFormat(PixelFormat.RGBA_8888);  // 32bit surface
 		setEGLContextFactory(new ContextFactory());
 		setEGLConfigChooser(new ConfigChooser(8, 8, 8, 8, 16, 0));   // r, b, g, a, dept, stencil
 		setRenderer(new Renderer());
 	}
 
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		SceneLib.touch(event);
+	@Override public boolean onTouchEvent(MotionEvent event) {
+		NativeScene.touch(event);
 		return true;
+	}
+
+	@Override public void onPause() {
+		Log.d(TAG, "onPause()");
+		super.onPause();
+	}
+
+	@Override public void onResume() {
+		Log.d(TAG, "onResume()");
+		super.onResume();
+	}
+
+	@Override public void surfaceCreated(SurfaceHolder holder) {
+		Log.d(TAG, "surfaceCreated()");
+		super.surfaceCreated(holder);
+	}
+
+	@Override public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
+		Log.d(TAG, "surfaceChanged(format:" + format + ", w:" + w + ", h:" + h + ")");
+		super.surfaceChanged(holder, format, w, h);
+	}
+
+	@Override public void surfaceDestroyed(SurfaceHolder holder) {
+		Log.d(TAG, "surfaceDestroyed()");
+		NativeScene.free();
+		super.surfaceDestroyed(holder);
 	}
 
 	private static class ContextFactory implements GLSurfaceView.EGLContextFactory {
@@ -127,17 +156,20 @@ public class TriangleView extends GLSurfaceView {
 	private static class Renderer implements GLSurfaceView.Renderer {
 
 		@Override public void onDrawFrame(GL10 gl) {
-			SceneLib.render();
+			NativeScene.display();
 		}
 
 		@Override public void onSurfaceChanged(GL10 gl, int width, int height) {
-			Log.d("TriangleView", "onSurfaceChanged():begin");
-			SceneLib.init(width, height);
-			Log.d("TriangleView", "onSurfaceChanged():end");
+			Log.d(TAG, "onSurfaceChanged(width:" + width + ", height:" + height + ")");
+			NativeScene.init(width, height);
 		}
 
-		@Override public void onSurfaceCreated(GL10 gl, EGLConfig config) {}
+		@Override public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+			Log.d(TAG, "onSurfaceCreated()");
+		}
+
+		private static String TAG = "GLSurfaceViewImpl.Renderer";
 	}
 
-	private static String TAG = "TriangleView";
+	private static String TAG = "GLSurfaceViewImpl";
 }  // TriangleView
