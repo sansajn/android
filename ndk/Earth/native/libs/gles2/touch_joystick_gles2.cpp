@@ -25,15 +25,15 @@ namespace detail {
 
 char const * flat_shader_source = R"(
 	#ifdef _VERTEX_
-	uniform mat4 local_to_screen;
 	attribute vec3 position;
+	uniform mat4 local_to_screen;
 	void main() {
 		gl_Position = local_to_screen * vec4(position, 1);
 	}
 	#endif
 	#ifdef _FRAGMENT_
 	precision mediump float;
-	uniform vec3 color;  // vec3(.7)
+	uniform vec3 color;  // vec3(.7);
 	void main() {
 		gl_FragColor = vec4(color, 1);
 	}

@@ -1,10 +1,7 @@
 #include "texture_loader_gles2.hpp"
 #include <GL/glew.h>
 #include "pix/pix_png.hpp"
-//#include "pix/pix_jpeg.hpp"
-#include <android/log.h>
-
-#define LOG_TAG "scene"
+#include "pix/pix_jpeg.hpp"
 
 namespace gles2 {
 
@@ -18,25 +15,25 @@ static string extension(string const & path);
 gles2::texture2d texture_from_file(std::string const & fname, texture::parameters const & params)
 {
 	string ext = extension(fname);
-//	if (ext == "jpg")
-//	{
-//		pix::jpeg_decoder d;
-//		d.decode(fname);
-//		pix::flip(d.result.height, d.result.rowbytes, d.result.pixels);
-//		return texture2d{d.result.width, d.result.height, match_pixel_format(d.result.channels), match_pixel_type(d.result.depth), d.result.pixels, params};
-//	}
-//	else if (ext == "png")
+	if (ext == "jpg" || ext == "jpeg")
 	{
-		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "%s", "texture_from_file():begin");
+		pix::jpeg_decoder d;
+		d.decode(fname);
+		pix::flip(d.result.height, d.result.rowbytes, d.result.pixels);
+		return texture2d{d.result.width, d.result.height, match_pixel_format(d.result.channels), match_pixel_type(d.result.depth), d.result.pixels, params};
+	}
+	else if (ext == "png")
+	{
 		pix::png_decoder d;
 		d.decode(fname);
-		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "%s", "texture_from_file():decoded");
 		pix::flip(d.result.height, d.result.rowbytes, d.result.pixels);
-		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "%s", "texture_from_file():flipped");
 		return gles2::texture2d{d.result.width, d.result.height, gles2::pixel_format::rgba, gles2::pixel_type::ub8, d.result.pixels, params};
 	}
-//	else
-//		throw std::logic_error{"unknown image type"};
+	else
+	{
+		// TODO: ak sa nepodari podla koncovky, skus podla magick-u (prvych n bajtov subora)
+		throw std::logic_error{"unknown image type"};
+	}
 }
 
 

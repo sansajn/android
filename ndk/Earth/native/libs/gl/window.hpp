@@ -11,14 +11,19 @@ template <template<class> class B, typename L>  // B : behaviour, L : layer
 class window : public B<L>
 {
 public:
+	using base = B<L>;
 	using parameters = typename L::parameters;
 
 	window(parameters const & params = parameters{});
+	void reshape(int w, int h) override;
 	unsigned width() const {return _w;}
 	unsigned height() const {return _h;}
 	float aspect_ratio() const {return (float)_w/(float)_h;}
 	glm::ivec2 center() const;
 	void bind_as_render_target();
+
+protected:
+	void geometry(unsigned w, unsigned h);  //!< sets window geometry
 
 private:
 	unsigned _w, _h;
@@ -77,7 +82,7 @@ public:
 
 	enum class action  //!< touch action
 	{
-		down, up, move, canceled
+		down, up, move, cancel
 	};
 
 	virtual void display() {}
@@ -192,6 +197,14 @@ window<B, L>::window(parameters const & params)
 }
 
 template <template<class> class B, typename L>
+void window<B, L>::reshape(int w, int h)
+{
+	base::reshape(w, h);
+	_w = w;
+	_h = h;
+}
+
+template <template<class> class B, typename L>
 glm::ivec2 window<B, L>::center() const
 {
 	return glm::ivec2{_w/2, _h/2};
@@ -201,6 +214,13 @@ template <template<class> class B, typename L>
 void window<B, L>::bind_as_render_target()
 {
 	L::bind_as_render_target(_w, _h);
+}
+
+template <template<class> class B, typename L>
+void window<B, L>::geometry(unsigned w, unsigned h)
+{
+	_w = w;
+	_h = h;
 }
 
 

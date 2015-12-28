@@ -2,156 +2,61 @@ package org.libgl.view;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
+import android.graphics.Rect;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
-
-import javax.microedition.khronos.egl.EGL10;
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.egl.EGLContext;
-import javax.microedition.khronos.egl.EGLDisplay;
-import javax.microedition.khronos.opengles.GL10;
 import org.libgl.wrapper.NativeScene;
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL10;
 
 public class GLSurfaceViewImpl extends GLSurfaceView {
 
 	public GLSurfaceViewImpl(Context context) {
 		super(context);
-		Log.d(TAG, "GLSurfaceViewImpl()");
-		init();
-	}
+		Log.d(TAG, "GLSurfaceViewImpl(), width:" + getWidth() + ", height:" + getHeight());
 
-	private void init() {
-		getHolder().setFormat(PixelFormat.RGBA_8888);  // 32bit surface
-		setEGLContextFactory(new ContextFactory());
-		setEGLConfigChooser(new ConfigChooser(8, 8, 8, 8, 16, 0));   // r, b, g, a, dept, stencil
-		setRenderer(new Renderer());
-	}
+		getHolder().setFormat(PixelFormat.RGBA_8888);
+		setEGLContextClientVersion(2);  // force gles2
+		setPreserveEGLContextOnPause(true);
+		// todo: aka sa vytvori konfiguracia (ocakavam rgba8, depth16) ?
 
-	@Override public boolean onTouchEvent(MotionEvent event) {
-		NativeScene.touch(event);
-		return true;
-	}
-
-	@Override public void onPause() {
-		Log.d(TAG, "onPause()");
-		super.onPause();
-	}
-
-	@Override public void onResume() {
-		Log.d(TAG, "onResume()");
-		super.onResume();
+		_renderer = new Renderer();
+		setRenderer(_renderer);
 	}
 
 	@Override public void surfaceCreated(SurfaceHolder holder) {
-		Log.d(TAG, "surfaceCreated()");
 		super.surfaceCreated(holder);
-	}
-
-	@Override public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-		Log.d(TAG, "surfaceChanged(format:" + format + ", w:" + w + ", h:" + h + ")");
-		super.surfaceChanged(holder, format, w, h);
+		Log.d(TAG, "surfaceCreated(), width:" + getWidth() + ", height: " + getHeight());
+		Rect surfaceFrame = holder.getSurfaceFrame();
+		_renderer.surfaceGeometry(surfaceFrame.width(), surfaceFrame.height());
 	}
 
 	@Override public void surfaceDestroyed(SurfaceHolder holder) {
-		Log.d(TAG, "surfaceDestroyed()");
-		NativeScene.free();
 		super.surfaceDestroyed(holder);
+		Log.d(TAG, "surfaceDestroyed()");
+
+		queueEvent(
+			new Runnable() {
+				public void run() {
+					Log.d("Runnable()", "hello from rendering thread!");
+					NativeScene.destroy();
+				}
+			});
 	}
 
-	private static class ContextFactory implements GLSurfaceView.EGLContextFactory {
-
-		public EGLContext createContext(EGL10 egl, EGLDisplay display, EGLConfig config) {
-			Log.w(TAG, "creating OpenGL ES 2.0 context");
-			checkEglError("Before eglCreateContext", egl);
-			int [] attrib_list = {EGL_CONTEXT_CLIENT_VERSION, 2, EGL10.EGL_NONE};
-			EGLContext context = egl.eglCreateContext(display, config, EGL10.EGL_NO_CONTEXT, attrib_list);
-			checkEglError("After eglCreateContext", egl);
-			return context;
-		}
-
-		public void destroyContext(EGL10 egl, EGLDisplay display, EGLContext context) {
-			egl.eglDestroyContext(display, context);
-		}
-
-		private static void checkEglError(String prompt, EGL10 egl) {
-			int error;
-			while ((error = egl.eglGetError()) != EGL10.EGL_SUCCESS)
-				Log.e(TAG, String.format("%s: EGL error: 0x%x", prompt, error));
-		}
-
-		private static int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
-	}  // ContextFactory
-
-	private static class ConfigChooser implements GLSurfaceView.EGLConfigChooser {
-
-		public ConfigChooser(int r, int g, int b, int a, int depth, int stencil) {
-			_red_size = r;
-			_green_size = g;
-			_blue_size = b;
-			_alpha_size = a;
-			_depth_size = depth;
-			_stencil_size = stencil;
-		}
-
-		public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display) {
-			int[] num_config = new int[1];  // number of matching EGL configurations
-			egl.eglChooseConfig(display, configAttribs2, null, 0, num_config);
-
-			int numConfigs = num_config[0];
-
-			if (numConfigs <= 0)
-				throw new IllegalArgumentException("No configs match configSpec");
-
-			EGLConfig[] configs = new EGLConfig[numConfigs];
-			egl.eglChooseConfig(display, configAttribs2, configs, numConfigs, num_config);
-
-			return chooseConfig(egl, display, configs);  // return the best one
-		}
-
-		public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display, EGLConfig[] configs) {
-			for (EGLConfig config : configs) {
-				int d = findConfigAttrib(egl, display, config, EGL10.EGL_DEPTH_SIZE, 0);
-				int s = findConfigAttrib(egl, display, config, EGL10.EGL_STENCIL_SIZE, 0);
-				if (d < _depth_size || s < _stencil_size)
-					continue;
-
-				int r = findConfigAttrib(egl, display, config, EGL10.EGL_RED_SIZE, 0);
-				int g = findConfigAttrib(egl, display, config, EGL10.EGL_GREEN_SIZE, 0);
-				int b = findConfigAttrib(egl, display, config, EGL10.EGL_BLUE_SIZE, 0);
-				int a = findConfigAttrib(egl, display, config, EGL10.EGL_ALPHA_SIZE, 0);
-				if (r == _red_size && g == _green_size && b == _blue_size && a == _alpha_size)
-					return config;
-			}
-			return null;
-		}
-
-		private int findConfigAttrib(EGL10 egl, EGLDisplay display, EGLConfig config, int attribute,	int defaultValue) {
-			if (egl.eglGetConfigAttrib(display, config, attribute, _value))
-				return _value[0];
-			else
-				return defaultValue;
-		}
-
-		private static int EGL_OPENGL_ES2_BIT = 4;
-
-		private static int[] configAttribs2 = {
-			EGL10.EGL_RED_SIZE, 4,
-			EGL10.EGL_GREEN_SIZE, 4,
-			EGL10.EGL_BLUE_SIZE, 4,
-			EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
-			EGL10.EGL_NONE
-		};
-
-		protected int _red_size;
-		protected int _green_size;
-		protected int _blue_size;
-		protected int _alpha_size;
-		protected int _depth_size;
-		protected int _stencil_size;
-		private int[] _value = new int[1];
-	}  // ConfigChooser
+	@Override public boolean onTouchEvent(MotionEvent event) {
+		final MotionEvent eventCopy = MotionEvent.obtain(event);
+		queueEvent(
+			new Runnable() {
+				MotionEvent _event = eventCopy;
+				public void run() {
+					NativeScene.touch(_event);  // user input nech je v rovnakom vlakne ako render
+				}
+			});
+		return true;
+	}
 
 	private static class Renderer implements GLSurfaceView.Renderer {
 
@@ -160,16 +65,26 @@ public class GLSurfaceViewImpl extends GLSurfaceView {
 		}
 
 		@Override public void onSurfaceChanged(GL10 gl, int width, int height) {
-			Log.d(TAG, "onSurfaceChanged(width:" + width + ", height:" + height + ")");
-			NativeScene.init(width, height);
+			Log.d(TAG, "onSurfaceChanged()");
+			NativeScene.reshape(width, height);
 		}
 
 		@Override public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-			Log.d(TAG, "onSurfaceCreated()");
+			Log.d(TAG, "onSurfaceCreated(), w:" + _width + ", h:" + _height);
+			NativeScene.create(_width, _height);
 		}
 
+		public void surfaceGeometry(int widht, int height) {
+			_width = widht;
+			_height = height;
+		}
+
+		private int _width = 0, _height = 0;
 		private static String TAG = "GLSurfaceViewImpl.Renderer";
 	}
 
+	Renderer _renderer;
 	private static String TAG = "GLSurfaceViewImpl";
-}  // TriangleView
+}
+
+

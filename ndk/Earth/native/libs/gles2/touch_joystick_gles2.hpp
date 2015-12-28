@@ -1,7 +1,7 @@
 #pragma once
 #include <glm/matrix.hpp>
-#include "gl/gles2/mesh_gles2.hpp"
-#include "gl/gles2/program_gles2.hpp"
+#include "gles2/mesh_gles2.hpp"
+#include "gles2/program_gles2.hpp"
 
 namespace gles2 {
 	namespace ui {
@@ -10,7 +10,7 @@ namespace gles2 {
 class joystick  //!< implementacie joysticku pre touch-screen zariadenia
 {
 public:
-	enum class touch_event {down, move, up};  // TODO: premenuj na action
+	enum class touch_event {down, move, up};  // TODO: tento touch event treba zrusit
 
 	joystick(glm::ivec2 const & origin, unsigned radius, unsigned screen_w, unsigned screen_h);  //!< origin and radius are in pixels (ortho projection)
 	bool up() const;

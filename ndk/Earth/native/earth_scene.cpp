@@ -10,12 +10,13 @@
 #include "gl/shapes.hpp"
 #include "gl/camera.hpp"
 #include "gl/colors.hpp"
-#include "gl/gles2/mesh_gles2.hpp"
-#include "gl/gles2/program_gles2.hpp"
-#include "gl/gles2/texture_loader_gles2.hpp"
-#include "gl/gles2/touch_joystick_gles2.hpp"
-#include "gl/gles2/default_shader_gles2.hpp"
 #include "gl/window.hpp"
+#include "gles2/mesh_gles2.hpp"
+#include "gles2/program_gles2.hpp"
+#include "gles2/texture_loader_gles2.hpp"
+#include "gles2/touch_joystick_gles2.hpp"
+#include "gles2/default_shader_gles2.hpp"
+#include "androidgl/android_window.hpp"
 
 char const * LOG_TAG = "scene";
 
@@ -48,201 +49,6 @@ constexpr float two_pi = 2.0f*M_PI;
 constexpr unsigned joystick_size = 75;
 
 
-namespace ui {
-
-int touch_list_finger_cast(event_handler::action finger_action);
-
-struct touch_event
-{
-	ivec2 position;
-	event_handler::action finger_action;
-	int finger_id;
-};
-
-class touch_list
-{
-public:
-	struct finger
-	{
-		enum {down = 1, move = 2, up = 4, canceled = 8};  // finger states
-		ivec2 position;
-		int id;
-		int state;  //!< \note kombinacia hodnot down, move, up a canceled
-	};
-
-	using iterator = std::list<finger>::iterator;
-
-	void insert(touch_event const & te);
-	iterator begin() {return _fingers.begin();}
-	iterator end() {return _fingers.end();}
-
-private:
-	std::list<finger> _fingers;
-};
-
-void touch_list::insert(touch_event const & te)
-{
-	auto it = find_if(_fingers.begin(), _fingers.end(),
-		[&te](finger const & f){return f.id == te.finger_id;});
-
-	if (it == _fingers.end())  // unikatny event
-	{
-		finger f;
-		f.position = te.position;
-		f.id = te.finger_id;
-		f.state = touch_list_finger_cast(te.finger_action);
-		_fingers.push_back(f);
-	}
-	else  // uz existujuci event
-	{
-		if (te.finger_action == event_handler::action::up)  // ak je action up, zmaz event
-			_fingers.erase(it);
-		else
-			it->state |= touch_list_finger_cast(te.finger_action);  // inak uprav stav
-	}
-}
-
-class touch_input
-{
-public:
-	touch_list & fingers() {return _touches;}
-
-	void touch_performed(int x, int y, int finger_id, event_handler::action a);  //!< internl use only (vola okenna vrstva)
-
-private:
-	touch_list _touches;
-};
-
-void touch_input::touch_performed(int x, int y, int finger_id, event_handler::action a)
-{
-	touch_event te;
-	te.position = ivec2{x,y};
-	te.finger_action = a;
-	te.finger_id = finger_id;
-	_touches.insert(te);
-}
-
-int touch_list_finger_cast(event_handler::action finger_action)
-{
-	switch (finger_action)
-	{
-		case event_handler::action::down: return touch_list::finger::down;
-		case event_handler::action::move: return touch_list::finger::move;
-		case event_handler::action::up: return touch_list::finger::up;
-		case event_handler::action::canceled: return touch_list::finger::canceled;
-		default:
-			throw std::logic_error{"unknown touch_event"};
-	}
-}
-
-
-class android_layer : public window_layer
-{
-public:
-	using parameters = window_layer::parameters;
-
-	android_layer(parameters const & params);
-	~android_layer();
-
-	class user_input  //!< keyboard, mouse and touch user input
-	{
-	public:
-		user_input() {}
-
-		// verejne rozhranie
-		bool key(unsigned char c) const;
-		bool key_up(unsigned char c) const;
-		bool any_of_key(char const * s) const;
-		bool any_of_key_up(char const * s) const;
-		bool mouse(button b) const;
-		bool mouse_up(button b) const;
-		bool mouse_wheel(wheel w) const;
-		glm::ivec2 const & mouse_position() const;
-
-		touch_input touch;  // touch api
-
-		// TODO: special keys support
-
-		void update() {}  //!< for internal use only
-
-		// funkcie informujuce o zmene stavu uzivatelskeho vstupu (vola ich okenna vrstva)
-		void mouse_motion(int x, int y) {}
-		void mouse_passive_motion(int x, int y) {}
-		void mouse_click(event_handler::button b, event_handler::state s, event_handler::modifier m, int x, int y) {}
-		void mouse_wheel(event_handler::wheel w, event_handler::modifier m, int x, int y) {}
-		void key_typed(unsigned char c, event_handler::modifier m, int x, int y) {}
-		void key_released(unsigned char c, event_handler::modifier m, int x, int y) {}
-		void touch_performed(int x, int y, int finger_id, event_handler::action a);
-	};
-};  // android_layer
-
-void android_layer::user_input::touch_performed(int x, int y, int finger_id, event_handler::action a)
-{
-	touch.touch_performed(x, y, finger_id, a);
-}
-
-using android_window = window<pool_behaviour, android_layer>;
-
-namespace android_private {
-
-event_handler::key tospecial(int k);
-event_handler::modifier tomodifier(int m);
-
-void display_func();
-void reshape_func(int w, int h);
-void idle_func();
-void close_func();
-void mouse_func(int button, int state, int x, int y);
-void motion_func(int x, int y);
-void passive_motion_func(int x, int y);
-void keyboard_func(unsigned char key, int x, int y);
-void keyboard_up_func(unsigned char key, int x, int y);
-void special_func(int key, int x, int y);
-void special_up_func(int key, int x, int y);
-void touch_func(int x, int y, int finger_id, int action);
-
-android_layer * __window = nullptr;
-
-}  // android_private
-
-
-android_layer::android_layer(parameters const & params)
-{
-	android_private::__window = this;
-}
-
-android_layer::~android_layer()
-{
-	assert(android_private::__window == this);
-	android_private::__window = nullptr;
-}
-
-
-namespace android_private {
-
-//void display_func()
-//{
-//	assert(__window && "invalid window");
-//	__window->display();
-//}
-
-void reshape_func(int w, int h)
-{
-	assert(__window && "invalid window");
-	__window->reshape(w, h);
-}
-
-//void touch_func(int x, int y, int finger_id, int action)
-//{
-//	assert(__window && "invalid window");
-//	__window->touch_performed(x, y, finger_id, (event_handler::action)action);
-//}
-
-}  // android_private
-
-}  // ui
-
-
 class scene_window : public ui::android_window
 {
 public:
@@ -254,6 +60,7 @@ public:
 	void display() override;
 	void update(float dt) override;
 	void input(float dt) override;
+	void reshape(int w, int h) override;
 
 private:
 	camera _cam;
@@ -264,22 +71,18 @@ private:
 	float _earth_ang, _moon_ang, _sun_ang;  //!< \note angles in radians
 	int _phong_position_a, _phong_texcoord_a, _phong_normal_a;
 	int _flat_position_a;
-
-public:
 	joystick _move, _look;
 };
 
 
 scene_window::scene_window(parameters const & params)
 	: base{params}
-	, _cam{radians(70.0f), aspect_ratio(), 0.01, 1000}
 	, _earth_w{radians(5.0f)}
 	, _moon_w{radians(12.5f)}
 	, _sun_w{radians(20.0f)}
 	, _move{ivec2{joystick_size+50, height()-joystick_size-50}, joystick_size, width(), height()}
 	, _look{ivec2{width()-joystick_size-50, height()-joystick_size-50}, joystick_size, width(), height()}
 {
-	_cam.position = vec3{0,0,95};
 	_sphere = make_sphere<mesh>(1.0f, 120, 90);
 
 	try {
@@ -304,6 +107,16 @@ scene_window::scene_window(parameters const & params)
 	} catch (std::exception & e) {
 		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "exception in scene_window{int, int} detected: %s", e.what());
 	}
+}
+
+void scene_window::reshape(int w, int h)
+{
+	__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "scene_window::reshape(w:%d, h:%d)", w, h);
+	base::reshape(w, h);
+	_cam = camera{radians(70.0f), aspect_ratio(), 0.01, 1000};
+	_cam.position = vec3{0,0,95};
+	_move.screen_geometry(w, h);
+	_look.screen_geometry(w, h);
 }
 
 void scene_window::display()
@@ -372,6 +185,7 @@ void scene_window::display()
 
 void scene_window::update(float dt)
 {
+	base::update(dt);
 	_sun_ang = fmod(_sun_ang + _sun_w * dt, two_pi);
 	_moon_ang = fmod(_moon_ang + _moon_w * dt, two_pi);
 	_earth_ang = fmod(_earth_ang + _earth_w * dt, two_pi);
@@ -379,6 +193,21 @@ void scene_window::update(float dt)
 
 void scene_window::input(float dt)
 {
+	// update joystick input (move to joystick.input(dt, user_input))
+	for (ui::touch_list::finger & f : in.touch.fingers())
+	{
+		joystick::touch_event te;
+		if (f.state & ui::touch_list::finger::move)
+			te = joystick::touch_event::move;
+		else if (f.state & ui::touch_list::finger::down)
+			te = joystick::touch_event::down;
+		else
+			te = joystick::touch_event::up;
+
+		_move.touch(f.position, te);
+		_look.touch(f.position, te);
+	}
+
 	// move-joystick use
 	float linear_velocity = 10.0;
 	if (_move.up())
@@ -400,106 +229,23 @@ void scene_window::input(float dt)
 		_cam.rotation = normalize(angleAxis(angular_velocity*dt, _cam.up()) * _cam.rotation);
 	if (_look.right())
 		_cam.rotation = normalize(angleAxis(-angular_velocity*dt, _cam.up()) * _cam.rotation);
+
+	base::input(dt);
 }
 
 scene_window * w = nullptr;
 
-/* jni scene mini wrapper, v init-e potrebujem vytvorit instanciu okna, v display-i
-potrebujem pristupovat do behviour casti okna a v touch potrebujem pristupovat do window-layer casti okna. */
-void init(int width, int height);
-void free();
-void display();
-void touch(float x, float y, int finger_id, int action);
 
-
-/*! funkcia sa zavola vzdy po vytvoreni egl kontextu, system moze egl kontext
-uvolnit pricom vsetky (opengl) zdroje budu automaticky uvolnene. */
-void init(int width, int height)
+void create(int width, int height)
 {
-	delete w;  // ak uz existuje scena, vytvor ju znova
+	__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "create(%d, %d)", width, height);
+	assert(!w && "scene already created");
 	w = new scene_window{scene_window::parameters{}.geometry(width, height)};
-
-	__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "%s", "init()");
 }
 
-void free()  //!< scena uz nie je potrebna
+void destroy()
 {
+	__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "%s", "destroy()");
 	delete w;
 	w = nullptr;
-
-	__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "%s", "free()");
 }
-
-void display()
-{
-	assert(w && "invalid scene");
-	w->loop_step();
-}
-
-ui::event_handler::action to_touch_action(int a)
-{
-	switch (a)
-	{
-		case 0: return ui::event_handler::action::down;
-		case 1: return ui::event_handler::action::up;
-		case 2: return ui::event_handler::action::move;
-		default:
-			throw std::logic_error{"unknown touch action"};
-	}
-}
-
-void touch(float x, float y, int finger_id, int action)  //!< \param action 0 for down, 1 for up, 2 for move and 3 for canceled
-{
-//	joystick::touch_event te;
-
-//	switch (action)
-//	{
-//		case 0:
-//			te = joystick::touch_event::down;
-//			break;
-
-//		case 1:
-//			te = joystick::touch_event::up;
-//			break;
-
-//		case 2:
-//			te = joystick::touch_event::move;
-//			break;
-
-//		default: return;  // ignore all other actions ...
-//	}
-
-//	//	update joysticks
-//	assert(w && "window not initialized");
-//	ivec2 touch_pos(x, y);
-//	w->_move.touch(touch_pos, te);
-//	w->_look.touch(touch_pos, te);
-
-	static_cast<ui::android_layer *>(w)->touch_performed(x, y, finger_id, to_touch_action(action));
-}
-
-
-extern "C" {
-
-JNIEXPORT void JNICALL Java_org_libgl_wrapper_NativeScene_init(JNIEnv * env, jobject thiz,
-	jint width, jint height)
-{
-	init(width, height);
-}
-
-JNIEXPORT void JNICALL Java_org_libgl_wrapper_NativeScene_free(JNIEnv * env, jobject thiz)
-{
-	free();
-}
-
-JNIEXPORT void JNICALL Java_org_libgl_wrapper_NativeScene_display(JNIEnv * env, jobject thiz)
-{
-	display();
-}
-
-JNIEXPORT void JNICALL Java_org_libgl_wrapper_NativeScene_touch(JNIEnv * env, jobject thiz, jint x, jint y, jint finger_id, jint action)
-{
-	touch(x, y, finger_id, action);
-}
-
-}  // extern "C"

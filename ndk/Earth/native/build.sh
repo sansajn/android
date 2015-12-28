@@ -1,4 +1,4 @@
-# popis skriptu ...
+#!/bin/bash
 
 if [ ! -d "build/x86" ]; then
 	mkdir -p build/x86

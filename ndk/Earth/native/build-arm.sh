@@ -1,4 +1,5 @@
-# popis skriptu ...
+#!/bin/bash
+
 if [ ! -d "build/arm" ]; then
 	mkdir -p build/arm
 fi
@@ -11,3 +12,4 @@ if [ ! -f "Makefile" ]; then
 fi
 
 make -j4
+

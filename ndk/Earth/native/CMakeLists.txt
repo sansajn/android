@@ -7,8 +7,10 @@ set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -llog -landroid -lGL
 set(LIBRARY_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/../app/src/main/jniLibs/${ARCH}")
 
 include_directories(libs)
+add_subdirectory(libs/androidgl)
 add_subdirectory(libs/gl)
+add_subdirectory(libs/gles2)
 add_subdirectory(libs/pix)
 
 add_library(scene SHARED earth_scene.cpp)
-target_link_libraries(scene gl pix)
+target_link_libraries(scene gl gles2 androidgl pix png12.a jpeg.a)

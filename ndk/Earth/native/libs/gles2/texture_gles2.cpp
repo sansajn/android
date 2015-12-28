@@ -1,15 +1,22 @@
 #include "texture_gles2.hpp"
+#include <algorithm>
+#include <stdexcept>
+#include <cassert>
+#include <GL/glew.h>
 
-namespace gl {
-	namespace gles2 {
+namespace gles2 {
 
 using std::swap;
+using std::logic_error;
 
 static GLenum opengl_cast(pixel_type t);
 static GLenum opengl_cast(pixel_format f);
-static GLenum opengl_cast(sized_internal_format i);
 static GLenum opengl_cast(texture_wrap w);
 static GLenum opengl_cast(texture_filter f);
+
+static unsigned alignment_to(unsigned width, pixel_format pfmt, pixel_type type);
+static unsigned pixel_sizeof(pixel_format pfmt, pixel_type type);
+static unsigned channel_count(pixel_format pfmt);
 
 
 texture::parameters::parameters()
@@ -66,13 +73,6 @@ texture::~texture()
 	glDeleteTextures(1, &_tid);
 }
 
-void texture::bind(unsigned unit)
-{
-	assert(unit >= 0 && unit < 32 && "not enougth texture units");
-	glActiveTexture(GL_TEXTURE0 + unit);
-	glBindTexture(_target, _tid);
-}
-
 texture::texture(texture && lhs)
 {
 	_tid = lhs._tid;
@@ -84,6 +84,13 @@ void texture::operator=(texture && lhs)
 {
 	swap(_tid, lhs._tid);
 	swap(_target, lhs._target);
+}
+
+void texture::bind(unsigned unit)
+{
+	assert(unit >= 0 && unit < 32 && "not enougth texture units");
+	glActiveTexture(GL_TEXTURE0 + unit);
+	glBindTexture(_target, _tid);
 }
 
 void texture::init(parameters const & params)
@@ -102,10 +109,10 @@ void texture::init(parameters const & params)
 }
 
 
-texture2d::texture2d(unsigned width, unsigned height, sized_internal_format ifmt, pixel_format pfmt, pixel_type type, void const * pixels, parameters const & params)
+texture2d::texture2d(unsigned width, unsigned height, pixel_format pfmt, pixel_type type, void const * pixels, parameters const & params)
 	: texture{GL_TEXTURE_2D, params}
 {
-	read(width, height, ifmt, pfmt, type, pixels);
+	read(width, height, pfmt, type, pixels);
 }
 
 texture2d::texture2d(unsigned tid, unsigned width, unsigned height, pixel_format pfmt, pixel_type type)
@@ -128,26 +135,14 @@ void texture2d::operator=(texture2d && lhs)
 	_h = lhs._h;
 }
 
-void texture2d::read(unsigned width, unsigned height, sized_internal_format ifmt, pixel_format pfmt, pixel_type type, void const * pixels)
+void texture2d::read(unsigned width, unsigned height, pixel_format pfmt, pixel_type type, void const * pixels)
 {
-	assert(!(width % 4) && "sirka nie je nasobkom 4och");  // TODO: je toto podmienkou pouzitia textur
 	_w = width;
 	_h = height;
-	assert(opengl_cast(ifmt) == opengl_cast(pfmt) && "pixel-format must match internal-format");
-	glTexImage2D(GL_TEXTURE_2D, 0, opengl_cast(ifmt), _w, _h, 0, opengl_cast(pfmt), opengl_cast(type), pixels);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, alignment_to(_w, pfmt, type));
+	glTexImage2D(GL_TEXTURE_2D, 0, opengl_cast(pfmt), _w, _h, 0, opengl_cast(pfmt), opengl_cast(type), pixels);  // internal-texture-format must equal pixel-format
+	// TODO: podpora mipmap ?
 	assert(glGetError() == GL_NO_ERROR && "opengl error");
-}
-
-
-texture2d texture_from_file(std::string const & fname)
-{
-	Magick::Image im(fname.c_str());
-	im.flip();
-
-	Magick::Blob imblob;
-	im.write(&imblob, "RGBA");
-
-	return texture2d{im.columns(), im.rows(), sized_internal_format::rgba, pixel_format::rgba, pixel_type::ub8, imblob.data()};
 }
 
 
@@ -170,8 +165,13 @@ GLenum opengl_cast(pixel_format f)
 	{
 		case pixel_format::rgb: return GL_RGB;
 		case pixel_format::rgba: return GL_RGBA;
+#ifdef __ANDROID__
+		case pixel_format::alpha: return GL_ALPHA;
 		case pixel_format::luminance: return GL_LUMINANCE;
 		case pixel_format::luminance_alpha: return GL_LUMINANCE_ALPHA;
+#else
+		case pixel_format::luminance: return GL_RED;
+#endif
 		default:
 			throw cast_error{"unknow pixel format"};
 	};
@@ -204,19 +204,49 @@ GLenum opengl_cast(texture_filter f)
 	}
 }
 
-GLenum opengl_cast(sized_internal_format i)
+unsigned alignment_to(unsigned width, pixel_format pfmt, pixel_type type)
 {
-	switch (i)
+	if ((width % 4) == 0)
+		return 4;
+
+	unsigned rowbytes = width * pixel_sizeof(pfmt, type);
+
+	if ((rowbytes % 4) == 0)
+		return 4;
+	else if ((rowbytes % 2) == 0)
+		return 2;
+	else
+		return 1;
+}
+
+unsigned pixel_sizeof(pixel_format pfmt, pixel_type type)
+{
+	switch (type)
 	{
-		case sized_internal_format::rgb: return GL_RGB;
-		case sized_internal_format::rgba: return GL_RGBA;
-		case sized_internal_format::luminance: return GL_LUMINANCE;
-		case sized_internal_format::luminance_alpha: return GL_LUMINANCE_ALPHA;
+		case pixel_type::ub8: return channel_count(pfmt);
+
+		case pixel_type::us565:
+		case pixel_type::us4444:
+		case pixel_type::us5551: return 2;
+
 		default:
-			throw std::exception();  // unknown internal-format
+			throw logic_error{"unknown pixel_type"};
 	}
 }
 
+unsigned channel_count(pixel_format pfmt)
+{
+	switch (pfmt)
+	{
+		case pixel_format::alpha:
+		case pixel_format::luminance: return 1;
+		case pixel_format::luminance_alpha: return 2;
+		case pixel_format::rgb: return 3;
+		case pixel_format::rgba: return 4;
 
-	}  // gles2
-}  // gl
+		default:
+			throw logic_error("unknown image pixel-format");
+	}
+}
+
+}  // gles2
