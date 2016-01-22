@@ -1,0 +1,16 @@
+Inicializácia
+
+	$ gradle init
+
+, builduj príkazom
+
+	$ gradle build
+
+a inštaluj príkazom
+
+	$ adb install -r build/outputs/apk/GradleApp-debug.apk
+
+Virtuálny stroj zpustím príkazom
+
+	$ <android-sdk>/tools/emulator -avd <vmachine>
+
