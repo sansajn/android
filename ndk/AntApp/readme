@@ -1,0 +1,12 @@
+Builduj príkazom
+
+	$ ant debug 
+
+a inštaluj príkazom
+
+	$ adb install -r bin/antapp-debug.apk
+
+Virtuálny stroj zpustím príkazom
+
+	$ <android-sdk>/tools/emulator -avd <vmachine>
+
