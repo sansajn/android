@@ -12,7 +12,7 @@
 #include "androidgl/android_window.hpp"
 #include "medkit_world.hpp"
 #include "level.hpp"
-//#include "sound.hpp"
+#include "sound.hpp"
 #include "resource.hpp"
 
 using std::vector;
@@ -37,7 +37,7 @@ char const * assets_path = "/sdcard/wolf3";
 string const font_path = "/usr/share/fonts/truetype/freefont/FreeMono.ttf";
 string const health_sound_path = "sound/health.ogg";
 string const door_sound_path = "sound/door.ogg";
-string const level_music_path = "sound/03_-_Wolfenstein_3D_-_DOS_-_Get_Them_Before_They_Get_You.ogg";
+string const level_music_path = "sound/Get_Them_Before_They_Get_You.ogg";
 //string const skinned_shader_path = "shaders/bump_skinned.glsl";
 //string const textured_shared_path = "shaders/textured.glsl";
 
@@ -240,7 +240,7 @@ w3dclone_scene::w3dclone_scene(parameters const & params)
 	game._physics = &_world;
 	game._enemies = _lvl.enemies();
 
-//	al::default_device->play_music(level_music_path);  // pusti podmaz TODO: tu chcem loop
+	al::device::ref().play_music(path_manager::ref().translate_path(level_music_path));  // pusti podmaz TODO: tu chcem moznost nastavit loop
 
 	glClearColor(0, 0, 0, 1);
 
@@ -256,10 +256,11 @@ void w3dclone_scene::update(float dt)
 	_world.update(dt);
 	_lvl.update(dt);
 	_player.update(dt);
+	al::device::ref().update();
 
 	if (_medkit_collision.medkit_picked)
 	{
-//		al::default_device->play_effect(health_sound_path);
+		al::device::ref().play_effect(path_manager::ref().translate_path(health_sound_path));
 		_player.heal(25);
 		_medkit_collision.medkit_picked = false;
 	}
@@ -446,7 +447,7 @@ void create(int width, int height)
 
 	path_manager::ref().root_path(assets_path);
 
-	//al::init_sound_system();
+	al::init_sound_system();
 	w = new w3dclone_scene{w3dclone_scene::parameters{}.geometry(width, height)};
 }
 
@@ -455,5 +456,5 @@ void destroy()
 	std::clog << "destroy()" << std::endl;
 	delete w;
 	w = nullptr;
-	//al::free_sound_system();
+	al::free_sound_system();
 }

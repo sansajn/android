@@ -13,7 +13,12 @@ void path_manager::root_path(std::string const & p)
 	_root_path = p;
 }
 
-std::string path_manager::translate_path(std::string const & p)
+string path_manager::translate_path(char const * p) const
+{
+	return translate_path(string{p});
+}
+
+string path_manager::translate_path(string const & p) const
 {
 	return _root_path + "/" + p;
 }

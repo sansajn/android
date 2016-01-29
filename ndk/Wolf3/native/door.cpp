@@ -4,11 +4,12 @@
 #include "gles2/model_gles2.hpp"
 #include "mechanics.hpp"
 #include "sound.hpp"
+#include "resource.hpp"
 
 using glm::mat4;
 using gles2::texture2d;
 
-std::string const door_object::open_sound_id = "/sdcard/wolf3/sound/door.ogg";
+std::string const door_object::open_sound_id = "sound/door.ogg";
 
 
 door_object::door_object(btVector3 const & position, type orientation, gles2::mesh const & m, texture2d & diff_tex)
@@ -74,7 +75,7 @@ void door_opening::enter(door_object * d)
 	body->setLinearVelocity(vel);
 	body->activate();
 
-	al::default_device->play_effect(door_object::open_sound_id);
+	al::device::ref().play_effect(path_manager::ref().translate_path(door_object::open_sound_id));
 }
 
 door_states door_opening::update(float dt, door_object * d)
@@ -126,7 +127,7 @@ void door_closing::enter(door_object * d)
 	body->setLinearVelocity(vel);
 	body->activate();
 
-	al::default_device->play_effect(door_object::open_sound_id);
+	al::device::ref().play_effect(path_manager::ref().translate_path(door_object::open_sound_id));
 }
 
 door_states door_closing::update(float dt, door_object * d)

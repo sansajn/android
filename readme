@@ -5,17 +5,23 @@ OpenGLWindow
 Service
 TouchDemo1 : ukážka použitia dotykového displeja
 MultiTouchDemo1 : ukážka použitia viacdotikového displeja
-
 ndk/HelloJni : volanie bezparametrickej funkcie implementovanej v jni
 ndk/CMake : používa cmake (a standalone-toolchain) na miesto ndk-build
 ndk/Cpp11 : c++11 ako natívny kód
 ndk/LoadRes : cez jni prečíta zdroje (assets) zbalené v apk súbore
 ndk/TriangleGles2 : vyrenderuje trojuholník pomocou opengl es 2
-ndk/LoadingPng : čítanie png pomocou libpng (staticky zlinkovana a
-	predinštalovana v toolchaine)
+ndk/LoadingPng : čítanie png pomocou libpng (staticky zlinkovana a predinštalovana v toolchaine)
 ndk/LoadingJpeg : čítanie jpeg pomocoi libjpeg
 ndk/ReadFile : čítanie s file systemu s jni
 ndk/Shapes : generovanie tvarou pomocou kničnice shapes
 ndk/Earth : sustava zem, mesiac slnko s osvetlenim a texturami
 ndk/ImageMagick : galeria pomocou image-magick-u
+ndk/OpenAL : prehrá zvuk pomocou knižnice openal
+ndk/WaveformPlay : prehrá zvuk vo formáte wav (waveform)
+ndk/VorbisPlay : prehrá zvuk vo formáte ogg/vorbis
+ndk/Animation : gpu anymácia modelu (skinning)
+ndk/AntApp
+ndk/GradleApp
+ndk/Bullet : streľba kociek voči stene v bullet-e
+ndk/CustomNative
 

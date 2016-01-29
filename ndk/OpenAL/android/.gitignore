@@ -1,0 +1,8 @@
+out/
+gen/
+libs/
+gradle/
+gradlew
+gradlew.bat
+*.iml
+local.properties

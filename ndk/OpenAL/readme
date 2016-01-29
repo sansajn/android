@@ -1,0 +1,17 @@
+Androidna apka buildovana pomocou gradle voľajúca natívnu knižnicu.
+
+Natívnu časť buildnem príkazom
+
+	$ ./build.sh
+
+, príkaz volá cmake. Java časť buildnem príkazom
+
+	$ cd android
+	$ gradle build
+
+Adresár 'android' v ktorom je build.gradle je možné importovať ako
+projekt buť android studiom, alebo aj intelii idea-ou.
+
+Názov aplykácie zmením v súbore 'AndroidManifest.xml' (property
+android:name elementu application).
+
