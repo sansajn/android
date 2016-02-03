@@ -1,8 +1,8 @@
 #!/bin/bash 
 
-ARCH=x86
+ARCH=arm
 TOOLCHAIN=~/opt/android19-$ARCH
-HOST=i686-linux-android
+HOST=arm-linux-androideabi
 
 if [ ! -d "build/$ARCH" ]; then
 	mkdir -p build/$ARCH
