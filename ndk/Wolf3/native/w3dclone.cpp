@@ -1,4 +1,5 @@
 // do levelu pridava dvere
+#include <memory>
 #include <vector>
 #include <string>
 #include <iostream>
@@ -9,6 +10,7 @@
 #include "gles2/default_shader_gles2.hpp"
 #include "gles2/light_gles2.hpp"
 #include "gles2/touch_joystick_gles2.hpp"
+#include "gles2/ui/touch_button_gles2.hpp"
 #include "androidgl/android_window.hpp"
 #include "medkit_world.hpp"
 #include "level.hpp"
@@ -17,6 +19,7 @@
 
 using std::vector;
 using std::string;
+using std::shared_ptr;
 using glm::vec2;
 using glm::ivec2;
 using glm::vec3;
@@ -192,6 +195,7 @@ private:
 	program _crosshair_prog;
 	phong_light _player_light;
 	joystick _move, _look;
+	ui::touch::button _fire;
 //	fps_object<w3dclone_scene> _fps;
 
 	bool _player_view = true;
@@ -244,6 +248,11 @@ w3dclone_scene::w3dclone_scene(parameters const & params)
 
 	glClearColor(0, 0, 0, 1);
 
+	// controls
+	shared_ptr<program> button_prog{new program{}};
+	button_prog->from_memory(gles2::flat_shader_source);
+	_fire.init(ivec2{joystick_size + 150, height()-joystick_size-200}, 50, width(), height(), button_prog);
+
 	std::clog << "w3dclone_scene::w3dclone_scene():done" << std::endl;
 }
 
@@ -267,6 +276,8 @@ void w3dclone_scene::update(float dt)
 
 	if (_player.health() == 0)
 		std::cout << "!!! player death !!!" << std::endl;
+
+	_fire.update();
 
 //	_fps.update(dt);
 }
@@ -333,6 +344,7 @@ void w3dclone_scene::display()
 
 	_move.render();
 	_look.render();
+	_fire.render();
 
 	base::display();
 }
@@ -340,12 +352,12 @@ void w3dclone_scene::display()
 void w3dclone_scene::input(float dt)
 {
 	// update joystick input (move to joystick.input(dt, user_input))
-	for (ui::touch_list::finger & f : in.touch.fingers())
+	for (ui::touch::finger & f : in.touch.fingers())
 	{
 		joystick::touch_event te;
-		if (f.state & ui::touch_list::finger::move)
+		if (f.move())
 			te = joystick::touch_event::move;
-		else if (f.state & ui::touch_list::finger::down)
+		else if (f.down())
 			te = joystick::touch_event::down;
 		else
 			te = joystick::touch_event::up;
@@ -353,6 +365,9 @@ void w3dclone_scene::input(float dt)
 		_move.touch(f.position, te);
 		_look.touch(f.position, te);
 	}
+
+	// buttons
+	_fire.input(in, dt);
 
 	btMatrix3x3 const & B = _player.transform().getBasis();
 	btVector3 right_dir = B.getColumn(0);
@@ -415,12 +430,12 @@ void w3dclone_scene::input(float dt)
 		}
 	}
 
-/* TODO: reimplement
+	{  // player fire
+		if (_fire.down())  // shoot
+			_player.fire();
+	}
 
-	if (_player_view)
-		_player.input(dt);
-	else
-		_free_view.input(dt);
+/* TODO: reimplement
 
 	if (in.key('e'))  // open door
 	{
@@ -428,9 +443,6 @@ void w3dclone_scene::input(float dt)
 		if (d)
 			d->open();
 	}
-
-	if (in.key(' '))  // shoot
-		_player.fire();
 */
 
 	base::input(dt);

@@ -82,13 +82,16 @@ public:
 
 	enum class action  //!< touch action
 	{
-		down, up, move, cancel
+		down = 1,
+		move = 2,
+		up = 4,
+		cancel = 8
 	};
 
 	virtual void display() {}
 	virtual void reshape(int w, int h) {}
 	virtual void idle() {}
-	virtual void close() {}
+	virtual void close() {}  //!< volane, pri zavreti okna
 	virtual void mouse_click(button b, state s, modifier m, int x, int y) {}
 	virtual void mouse_motion(int x, int y) {}
 	virtual void mouse_passive_motion(int x, int y) {}
@@ -99,6 +102,23 @@ public:
 	virtual void special_key_released(key k, modifier m, int x, int y) {}
 	virtual void touch_performed(int x, int y, int finger_id, action a) {}
 };  // event_handler
+
+
+namespace touch {  //!< user-input-touch support
+
+struct finger
+{
+	glm::ivec2 position;
+	int id;
+	int state;  //!< \note kombinacia hodnot s event_handler::action (down, move, up a cancel)
+
+	bool down() const;
+	bool move() const;
+	bool up() const;
+	bool cancel() const;
+};  // finger
+
+}  // touch
 
 
 //! abstrakcia okennej vrstvy \sa glut_layer
@@ -136,9 +156,6 @@ public:
 	virtual void main_loop_event() {}
 	virtual void swap_buffers() {}
 	virtual int modifiers() {assert(0 && "unimplemented method"); return 0;}
-	virtual void hide_cursor() {}
-	virtual void show_cursor() {}
-	virtual void warp_pointer(unsigned x, unsigned y) {}
 	virtual void bind_as_render_target(int w, int h) {}
 };
 
@@ -166,7 +183,7 @@ public:
 	void start();
 	virtual void update(float dt);
 	virtual void input(float dt) {}
-	void close() override;
+	void close() override;  //!< \sa event_handler::close()
 	void loop();
 	bool loop_step();
 	float fps() const;

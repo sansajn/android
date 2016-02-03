@@ -16,7 +16,9 @@ set(srcs
 	sprite_model_gles2.cpp
 	texture_gles2.cpp
 	texture_loader_gles2.cpp
-	touch_joystick_gles2.cpp)
+	touch_joystick_gles2.cpp
+	ui/touch_button_gles2.cpp
+)
 
 add_library(gles2 STATIC ${srcs})
 
