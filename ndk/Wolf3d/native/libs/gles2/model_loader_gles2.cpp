@@ -8,8 +8,6 @@
 #include <GL/glew.h>
 #include "gles2/texture_loader_gles2.hpp"
 
-#include <iostream>
-
 namespace gles2 {
 
 using std::vector;
@@ -166,7 +164,6 @@ mesh extract_mesh(aiMesh const & m)
 
 vector<property *> create_texture_mesh_properties(string const & root, string const & tex_name, model_loader_parameters const & params)
 {
-	std::clog << "create_texture_mesh_properties()" << std::endl;
 	vector<property *> props;
 
 	fs::path root_path{root};
@@ -179,7 +176,6 @@ vector<property *> create_texture_mesh_properties(string const & root, string co
 
 	shared_ptr<texture2d> tex{new texture2d{texture_from_file(tex_path.c_str())}};
 	props.push_back(new texture_property{tex, params.diffuse_uniform_name, params.diffuse_texture_bind_unit});
-	std::clog << "  diffuse texture created" << std::endl;
 
 	// normal texture
 	tex_path = root_path / fs::path{tex_filename.string() + params.normal_texture_postfix + params.file_format};  // "<name>_local"
@@ -187,7 +183,6 @@ vector<property *> create_texture_mesh_properties(string const & root, string co
 	{
 		shared_ptr<texture2d> norm_tex{new texture2d{texture_from_file(tex_path.c_str())}};
 		props.push_back(new texture_property{norm_tex, params.normal_uniform_name, params.normal_texture_bind_unit});
-		std::clog << "  normal texture created" << std::endl;
 	}
 
 	// height texture
@@ -196,7 +191,6 @@ vector<property *> create_texture_mesh_properties(string const & root, string co
 	{
 		shared_ptr<texture2d> height_tex{new texture2d{texture_from_file(tex_path.c_str())}};
 		props.push_back(new texture_property{height_tex, params.height_uniform_name, params.height_texture_bind_unit});
-		std::clog << "  height texture created" << std::endl;
 	}
 
 	return props;

@@ -11,8 +11,6 @@
 #include "gles2/model_loader_gles2.hpp"
 #include "gles2/texture_loader_gles2.hpp"
 
-#include <iostream>
-
 namespace gles2 {
 
 using std::move;
@@ -266,7 +264,6 @@ bool animated_model::has_animation() const
 
 animated_model animated_model_from_file(std::string const & model_file, model_loader_parameters const & params)
 {
-	std::clog << "animated_model_from_file()" << std::endl;
 	animated_model result;
 
 	md5::model mdl{model_file};
@@ -281,7 +278,6 @@ animated_model animated_model_from_file(std::string const & model_file, model_lo
 			props = create_texture_mesh_properties(root_path.string(), tex_name, params);
 
 		result.append_mesh(create_animated_mesh(mdl, i), props);
-		std::clog << "  mesh #" << i << ". created" << std::endl;
 	}
 
 	vector<mat4> inverse_bind_pose;
@@ -294,8 +290,6 @@ animated_model animated_model_from_file(std::string const & model_file, model_lo
 	}
 
 	result.assign_inverse_bind_pose(move(inverse_bind_pose));
-
-	std::clog << "  done" << std::endl;
 
 	return result;
 }
@@ -382,6 +376,7 @@ shared_ptr<mesh> create_animated_mesh(md5::model const & mdl, int mesh_idx)  // 
 	for (md5::vertex const & v : m.vertices)
 	{
 //		assert(v.wcount < 5 && "only 4 weights per vertex supported");
+		// TODO: model vykazuje artefakty, treba ohandlovat situacie v ktorych je pozet spojou > 4
 
 		ivec4 ids{0};
 		for (int i = 0; i < min(v.wcount, 4); ++i)

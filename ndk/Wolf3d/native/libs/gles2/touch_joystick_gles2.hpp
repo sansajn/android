@@ -3,7 +3,7 @@
 #include "gles2/mesh_gles2.hpp"
 #include "gles2/program_gles2.hpp"
 
-namespace gles2 { namespace ui {	namespace touch {
+namespace gles2 { namespace ui { namespace touch {
 
 class joystick  //!< implementacie joysticku pre touch-screen zariadenia
 {
