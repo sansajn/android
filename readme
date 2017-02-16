@@ -24,4 +24,7 @@ ndk/AntApp
 ndk/GradleApp
 ndk/Bullet : streľba kociek voči stene v bullet-e
 ndk/CustomNative
+Galacticon : advanced RecyclerView sample
+RecyclerView : most simple RecyclerView sample
+RecyclerViewGallery : RecyclerView with image sample
 
