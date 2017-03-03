@@ -1,0 +1,4 @@
+<resources>
+	<string name="app_name">ImagePicker</string>
+	<string name="change_image">change image</string>
+</resources>
