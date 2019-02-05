@@ -60,7 +60,7 @@ ndk/Bullet : streľba kociek voči stene v bullet-e
 ndk/CustomNative
 
 
-**ndk/TwoSharedLibraries**: Použitie knižnice zo závislosťou na inej dynamickej knižnici. 
+**ndk/TwoSharedLibraries**: Použitie knižnice zo závislosťou na inej dynamickej knižnici.
 
-Pri loadovaní prvej native-lib systém zistí jej závislosť na druhej knižnici b a sám ju natiahne (netreba volať System.LoadLibrary).
+Pri loadovaní prvej *native-lib* knižnice systém zistí jej závislosť na druhej knižnici *b* a sám ju natiahne (netreba volať `System.LoadLibrary()`).
 
