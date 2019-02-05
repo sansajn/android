@@ -1,10 +1,18 @@
-Kolekcia programou predvádzajúcich funkcionalitu/api androidu.
+# Android
+
+Kolekcia programou testujúcich funkcionalitu androidu.
+
+
+## Ukážky
 
 Lifecycle
 OpenGLWindow
 Service
 TouchDemo1 : ukážka použitia dotykového displeja
 MultiTouchDemo1 : ukážka použitia viacdotikového displeja
+Galacticon : advanced RecyclerView sample
+RecyclerView : most simple RecyclerView sample
+RecyclerViewGallery : RecyclerView with image sample
 ndk/HelloJni : volanie bezparametrickej funkcie implementovanej v jni
 ndk/CMake : používa cmake (a standalone-toolchain) na miesto ndk-build
 ndk/Cpp11 : c++11 ako natívny kód
@@ -24,7 +32,8 @@ ndk/AntApp
 ndk/GradleApp
 ndk/Bullet : streľba kociek voči stene v bullet-e
 ndk/CustomNative
-Galacticon : advanced RecyclerView sample
-RecyclerView : most simple RecyclerView sample
-RecyclerViewGallery : RecyclerView with image sample
+
+**ndk/TwoSharedLibraries**: Použitie knižnice zo závislosťou. 
+
+Pri loadovaní prvej native-lib systém zistí jej závislosť na druhej knižnici b a sám ju natiahne (netreba volať System.LoadLibrary).
 
