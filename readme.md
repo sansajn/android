@@ -11,6 +11,17 @@ Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adre
 
 ![](images/GridView.png "GridView sample")
 
+
+**ListView** : ukážka použitia `ListView` komponenty.
+
+![](images/ListView.png "ListView sample")
+
+
+**TableLayout** : ukážka použitia dynamicky naplnenéj `TableLayout` komponenty. `TableLayout` je možné použiť pri zobrazovaní dát vo forme tabuľky (zdá sa, že android k tomuto účelu neimplementuje žiadnu štandardnú komponentu).
+
+![](images/TableLayout.png "TableLayout sample")
+
+
 ## ndk:ukážky
 
 Ukážky predvádzajúce funkcionalitu JNI, dostupné v adresáry `jni`.
