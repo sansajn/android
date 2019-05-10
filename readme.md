@@ -1,35 +1,29 @@
 # Android
 
-Kolekcia programou testujúcich funkcionalitu androidu.
+Projekt obsahuje kolekciu programou predvádzajúcich základnu funkcionalitu android-u.
 
 
-## Ukážky
+## kotlin:ukážky
 
-Lifecycle
+Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adresáry `kotlin`.
 
-OpenGLWindow
+**GridView** : ukážka použitia `GridView` komponenty.
 
-Service
+![](images/GridView.png "GridView sample")
 
-TouchDemo1 : ukážka použitia dotykového displeja
+## ndk:ukážky
 
-MultiTouchDemo1 : ukážka použitia viacdotikového displeja
+Ukážky predvádzajúce funkcionalitu JNI, dostupné v adresáry `jni`.
 
-Galacticon : advanced RecyclerView sample
+**HelloJni** : základná ukážka, volanie bezparametrickej funkcie implementovanej v jni.
 
-RecyclerView : most simple RecyclerView sample
+**CMake** : ukážka použitia cmake (a standalone toolchain) na miesto štandardného ndk-build. Standalone toolchain je nutné najprv vygenerovať, pozri `android_tips.txt`.
 
-RecyclerViewGallery : RecyclerView with image sample
+**Cpp11** : jednoduchá ukážka demonštrujúca použitie c++11 kompatibilného kódu.
 
-ndk/HelloJni : volanie bezparametrickej funkcie implementovanej v jni
+**LoadRes** : cez jni prečíta zdroje (assets) zbalené v apk súbore
 
-ndk/CMake : používa cmake (a standalone-toolchain) na miesto ndk-build
-
-ndk/Cpp11 : c++11 ako natívny kód
-
-ndk/LoadRes : cez jni prečíta zdroje (assets) zbalené v apk súbore
-
-ndk/TriangleGles2 : vyrenderuje trojuholník pomocou opengl es 2
+**TriangleGles2** : trojuholník vyrenderovaný pomocou opengl es 2
 
 ndk/LoadingPng : čítanie png pomocou libpng (staticky zlinkovana a predinštalovana v toolchaine)
 
@@ -59,6 +53,24 @@ ndk/Bullet : streľba kociek voči stene v bullet-e
 
 ndk/CustomNative
 
+
+## java:ukážky (muzeum)
+
+Lifecycle
+
+OpenGLWindow
+
+Service
+
+TouchDemo1 : ukážka použitia dotykového displeja
+
+MultiTouchDemo1 : ukážka použitia viacdotikového displeja
+
+Galacticon : advanced RecyclerView sample
+
+RecyclerView : most simple RecyclerView sample
+
+RecyclerViewGallery : RecyclerView with image sample
 
 **ndk/TwoSharedLibraries**: Použitie knižnice zo závislosťou na inej dynamickej knižnici.
 
