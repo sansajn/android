@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ImageView</string>
+    <string name="this_is_imageview">This is ImageView</string>
+    <string name="change_image">Change Image</string>
+</resources>
