@@ -1,7 +1,6 @@
 # Android
 
-Projekt obsahuje kolekciu programou predvádzajúcich základnu funkcionalitu android-u.
-
+Repozitár obsahuje kolekciu programou/ukážok predvádzajúcich použitie jednotlivých komponent systému Android.
 
 ## kotlin:ukážky
 
@@ -9,18 +8,11 @@ Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adre
 
 **GridView** : ukážka použitia `GridView` komponenty.
 
-
 **ListView** : ukážka použitia `ListView` komponenty.
-
 
 **TableLayout** : ukážka použitia dynamicky naplnenéj `TableLayout` komponenty. `TableLayout` je možné použiť pri zobrazovaní dát vo forme tabuľky (zdá sa, že android k tomuto účelu neimplementuje žiadnu štandardnú komponentu).
 
-
 **ImageView** : ukážka práce s `ImageView` komponentou.
-
-
-**SQLiteDatabase** : ukážka práce s SQLite databázou, aplykácia okre iného predvádza, ako spustiť aktyvitu a získať s nej dáta zadané užívateľom, ďalej ako vytvoriť menu.
-
 
 ![](images/grid_view_small.png "GridView sample screenshot.")
 ![](images/list_view_small.png "ListView sample screenshot.")
@@ -28,6 +20,10 @@ Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adre
 ![](images/image_view_small.png "ImageView sample screenshot.")
 
 
+**SQLiteDatabase** : ukážka práce s SQLite databázou, aplykácia okre iného predvádza, ako spustiť aktyvitu a získať s nej dáta zadané užívateľom, ďalej ako vytvoriť menu.
+
+![](images/sqlite_database_small.png "SQLiteDatabase main activity sample screenshot.")
+![](images/sqlite_database_edit_activity_small.png "SQLiteDatabase edit activity sample screenshot.")
 
 ## ndk:ukážky
 
