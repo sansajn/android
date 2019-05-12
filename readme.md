@@ -9,17 +9,24 @@ Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adre
 
 **GridView** : ukážka použitia `GridView` komponenty.
 
-![](images/GridView.png "GridView sample")
-
 
 **ListView** : ukážka použitia `ListView` komponenty.
-
-![](images/ListView.png "ListView sample")
 
 
 **TableLayout** : ukážka použitia dynamicky naplnenéj `TableLayout` komponenty. `TableLayout` je možné použiť pri zobrazovaní dát vo forme tabuľky (zdá sa, že android k tomuto účelu neimplementuje žiadnu štandardnú komponentu).
 
-![](images/TableLayout.png "TableLayout sample")
+
+**ImageView** : ukážka práce s `ImageView` komponentou.
+
+
+**SQLiteDatabase** : ukážka práce s SQLite databázou, aplykácia okre iného predvádza, ako spustiť aktyvitu a získať s nej dáta zadané užívateľom, ďalej ako vytvoriť menu.
+
+
+![](images/grid_view_small.png "GridView sample screenshot.")
+![](images/list_view_small.png "ListView sample screenshot.")
+![](images/table_layout_small.png "TableLayout sample screenshot.")
+![](images/image_view_small.png "ImageView sample screenshot.")
+
 
 
 ## ndk:ukážky
