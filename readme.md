@@ -22,8 +22,12 @@ Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adre
 
 **SQLiteDatabase** : ukážka práce s SQLite databázou, aplykácia okre iného predvádza, ako spustiť aktyvitu a získať s nej dáta zadané užívateľom, ďalej ako vytvoriť menu.
 
+
+**AndroidPlot** : ukážka renderovania grafou (xy plot) pomocou knižnice androidplot
+
 ![](images/sqlite_database_small.png "SQLiteDatabase main activity sample screenshot.")
 ![](images/sqlite_database_edit_activity_small.png "SQLiteDatabase edit activity sample screenshot.")
+![](images/simplexy_plot.png "AndroidPlot sample screenshot.")
 
 ## ndk:ukážky
 
