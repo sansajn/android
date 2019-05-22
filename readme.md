@@ -25,9 +25,15 @@ Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adre
 
 **AndroidPlot** : ukážka renderovania grafou (xy plot) pomocou knižnice androidplot
 
+
+**BarPlot** : ukážka renderovania bar grafu knižnicou androidplot.
+
+
 ![](images/sqlite_database_small.png "SQLiteDatabase main activity sample screenshot.")
 ![](images/sqlite_database_edit_activity_small.png "SQLiteDatabase edit activity sample screenshot.")
 ![](images/simplexy_plot.png "AndroidPlot sample screenshot.")
+![](images/barplot.png "BarPlot sample screenshot.")
+
 
 ## ndk:ukážky
 
@@ -90,9 +96,13 @@ RecyclerView : most simple RecyclerView sample
 
 RecyclerViewGallery : RecyclerView with image sample
 
+**BarPlot** : ukážka renderovania bar grafu knižnicou androidplot.
+
 **ndk/TwoSharedLibraries**: Použitie knižnice zo závislosťou na inej dynamickej knižnici.
 
 Pri loadovaní prvej *native-lib* knižnice systém zistí jej závislosť na druhej knižnici *b* a sám ju natiahne (netreba volať `System.LoadLibrary()`).
 
 
 **ndk/TwoSharedLibrariesInKotlin**: Použitie knižnice zo závislosťou na inej dynamickej knižnici v Kotline. Pozri popis `ndk/TwoSharedLibraries`.
+
+
