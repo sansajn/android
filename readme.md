@@ -35,6 +35,12 @@ Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adre
 ![](images/barplot.png "BarPlot sample screenshot.")
 
 
+**TabLayout** : ukážka tabou a fragmentou
+
+![](images/tablayout.png "TabLayout sample screenshot.")
+
+
+
 ## ndk:ukážky
 
 Ukážky predvádzajúce funkcionalitu JNI, dostupné v adresáry `jni`.
