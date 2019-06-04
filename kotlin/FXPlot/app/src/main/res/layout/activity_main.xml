@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <com.androidplot.xy.XYPlot
+       android:id="@+id/plot"
+       style="@style/APDefacto.Dark"
+       android:layout_width="fill_parent"
+       android:layout_height="fill_parent"
+       app:domainOriginLineThickness="4dp"
+       app:domainTitle="domain"
+       app:gridInsetBottom="20dp"
+       app:gridInsetRight="30dp"
+       app:gridInsetTop="30dp"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:lineLabelAlignTop="center"
+       app:lineLabelInsetRight="25dp"
+       app:lineLabelInsetTop="25dp"
+       app:lineLabelRotationBottom="-45"
+       app:lineLabelRotationTop="0"
+       app:lineLabels="left|bottom|top|right"
+       app:rangeOriginLineThickness="4dp"
+       app:rangeTitle="range"
+       app:title="A Simple XY Plot" />
+
+</android.support.constraint.ConstraintLayout>

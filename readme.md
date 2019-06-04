@@ -34,10 +34,15 @@ Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adre
 ![](images/simplexy_plot.png "AndroidPlot sample screenshot.")
 ![](images/barplot.png "BarPlot sample screenshot.")
 
+**TabLayout** : použitie tabou a fragmentou v apke
 
-**TabLayout** : ukážka tabou a fragmentou
+**FXPlot**: vyzualizácia funkcie y=x^2-13 v android plot knižnici (negatívne hodnoty, grid, popisky)
 
 ![](images/tablayout.png "TabLayout sample screenshot.")
+
+![](images/fxplot.png"fx plot sample screenshot.")
+
+
 
 
 
