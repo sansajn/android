@@ -38,9 +38,13 @@ Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adre
 
 **FXPlot**: vyzualizácia funkcie y=x^2-13 v android plot knižnici (negatívne hodnoty, grid, popisky)
 
+**CombinedPlot** : ďalšie použitie knižnice androidplot 
+
 ![](images/tablayout.png "TabLayout sample screenshot.")
 
 ![](images/fxplot.png"fx plot sample screenshot.")
+
+![](images/combined_plot.png"fx plot sample screenshot.")
 
 
 

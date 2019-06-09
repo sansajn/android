@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context=".MainActivity">
+
+	<com.androidplot.xy.XYPlot
+		android:id="@+id/plot"
+		style="@style/APDefacto.Light"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		app:domainOriginLineThickness="0dp"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:lineLabelRotationBottom="-45"
+		app:lineLabels="left|bottom"
+		app:rangeOriginLineThickness="2dp"
+		app:graphMarginLeft="50dp"
+		app:legendVisible="false" />
+
+</android.support.constraint.ConstraintLayout>
