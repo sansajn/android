@@ -46,7 +46,7 @@ Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adre
 
 ![](images/combined_plot.png"fx plot sample screenshot.")
 
-
+**JeromqPush** : ukážka použitia push-pull ZMQ soketou
 
 
 
