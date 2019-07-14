@@ -47,7 +47,7 @@ Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adre
 
 **JeromqPush** : ukážka použitia push-pull ZMQ soketou
 
-**NavigationDrawer**: ukážka použitia DrawerLayout a NavigationView v ktorej sú jednotlivé volby (home, gallery, slideshow, ...) implementované ako fragmenty. 
+**NavigationDrawer**: ukážka použitia `DrawerLayout` a `NavigationView` v ktorej sú jednotlivé volby (home, gallery, slideshow, ...) implementované ako fragmenty (`Fragment`). 
 
 ![](images/tablayout.png "TabLayout sample screenshot.")
 ![](images/navigation_drawer.png "NavigationDrawer sample screenshot.")
