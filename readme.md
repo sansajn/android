@@ -12,41 +12,45 @@ Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adre
 
 **TableLayout** : ukážka použitia dynamicky naplnenéj `TableLayout` komponenty. `TableLayout` je možné použiť pri zobrazovaní dát vo forme tabuľky (zdá sa, že android k tomuto účelu neimplementuje žiadnu štandardnú komponentu).
 
-**ImageView** : ukážka práce s `ImageView` komponentou.
 
 ![](images/grid_view_small.png "GridView sample screenshot.")
 ![](images/list_view_small.png "ListView sample screenshot.")
 ![](images/table_layout_small.png "TableLayout sample screenshot.")
-![](images/image_view_small.png "ImageView sample screenshot.")
 
+**ImageView** : ukážka práce s `ImageView` komponentou.
 
 **SQLiteDatabase** : ukážka práce s SQLite databázou, aplykácia predvádza, ako spustiť aktyvitu a získať z nej dáta zadané užívateľom, ako vytvoriť menu, alebo aj ako použiť ListView.
 
 
-**AndroidPlot** : ukážka renderovania grafou (xy plot) pomocou knižnice androidplot
+![](images/image_view_small.png "ImageView sample screenshot.")
+![](images/sqlite_database_small.png "SQLiteDatabase main activity sample screenshot.")
+![](images/sqlite_database_edit_activity_small.png "SQLiteDatabase edit activity sample screenshot.")
 
+
+**AndroidPlot** : ukážka renderovania grafou (xy plot) pomocou knižnice androidplot
 
 **BarPlot** : ukážka renderovania bar grafu knižnicou androidplot.
 
+**FXPlot**: vyzualizácia funkcie y=x^2-13 v android plot knižnici (negatívne hodnoty, grid, popisky)
 
-![](images/sqlite_database_small.png "SQLiteDatabase main activity sample screenshot.")
-![](images/sqlite_database_edit_activity_small.png "SQLiteDatabase edit activity sample screenshot.")
 ![](images/simplexy_plot.png "AndroidPlot sample screenshot.")
 ![](images/barplot.png "BarPlot sample screenshot.")
+![](images/fxplot.png "fx plot sample screenshot.")
 
-**TabLayout** : použitie tabou a fragmentou v apke
-
-**FXPlot**: vyzualizácia funkcie y=x^2-13 v android plot knižnici (negatívne hodnoty, grid, popisky)
 
 **CombinedPlot** : ďalšie použitie knižnice androidplot 
 
-![](images/tablayout.png "TabLayout sample screenshot.")
+![](images/combined_plot.png "fx plot sample screenshot.")
 
-![](images/fxplot.png"fx plot sample screenshot.")
 
-![](images/combined_plot.png"fx plot sample screenshot.")
+**TabLayout** : použitie tabou a fragmentou v apke
 
 **JeromqPush** : ukážka použitia push-pull ZMQ soketou
+
+**NavigationDrawer**: ukážka použitia DrawerLayout a NavigationView v ktorej sú jednotlivé volby (home, gallery, slideshow, ...) implementované ako fragmenty. 
+
+![](images/tablayout.png "TabLayout sample screenshot.")
+![](images/navigation_drawer.png "NavigationDrawer sample screenshot.")
 
 
 
