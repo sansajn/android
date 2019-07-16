@@ -52,6 +52,10 @@ Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adre
 ![](images/tablayout.png "TabLayout sample screenshot.")
 ![](images/navigation_drawer.png "NavigationDrawer sample screenshot.")
 
+**Preferences** : ukážka dizajnu nastavení pomocou `PreferenceFragmentCompat` s fungujúcim summary.
+
+![](images/preferences.png "Preferences sample screenshot.")
+
 
 
 ## ndk:ukážky
