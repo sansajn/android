@@ -12,13 +12,12 @@ Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adre
 
 **TableLayout** : ukážka použitia dynamicky naplnenéj `TableLayout` komponenty. `TableLayout` je možné použiť pri zobrazovaní dát vo forme tabuľky (zdá sa, že android k tomuto účelu neimplementuje žiadnu štandardnú komponentu).
 
-
 ![](images/grid_view_small.png "GridView sample screenshot.") ![](images/list_view_small.png "ListView sample screenshot.") ![](images/table_layout_small.png "TableLayout sample screenshot.")
+
 
 **ImageView** : ukážka práce s `ImageView` komponentou.
 
 **SQLiteDatabase** : ukážka práce s SQLite databázou, aplykácia predvádza, ako spustiť aktyvitu a získať z nej dáta zadané užívateľom, ako vytvoriť menu, alebo aj ako použiť ListView.
-
 
 ![](images/image_view_small.png "ImageView sample screenshot.") ![](images/sqlite_database_small.png "SQLiteDatabase main activity sample screenshot.") ![](images/sqlite_database_edit_activity_small.png "SQLiteDatabase edit activity sample screenshot.")
 
@@ -49,6 +48,10 @@ Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adre
 
 ![](images/preferences.png "Preferences sample screenshot.")
 
+
+**EmptyListPlaceholder**: ukážka ako na placeholder view v prípade prázdneho ListView, tiež ukazuje ako použiť FrameLayout.
+
+![](images/empty_list_placeholder.png "EmptyListPlaceholder sample screenshot.")
 
 
 ## ndk:ukážky
