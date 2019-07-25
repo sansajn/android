@@ -3,40 +3,36 @@ package example.jeromq.subscriber
 import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
 import org.zeromq.ZContext
 import org.zeromq.ZMQ
 import java.util.*
 
 
-class ZMQSubscriberTask : AsyncTask<Void, Void, Void?> {
+class ZMQSubscriberTask(private val delegate: (String) -> Unit) : AsyncTask<Any, Void, MutableList<String>>() {
 
-	constructor(sub: ZMQ.Socket, out: TextView) : super() {
-		_sub = sub
-		_out = out
+	override fun doInBackground(vararg params: Any): MutableList<String> {
+		val sub = params[0] as ZMQ.Socket
+		val commands = mutableListOf<String>()
+
+		while (true) {
+			val d = sub.recvStr(ZMQ.NOBLOCK)
+			if (d != null)
+				commands.add(d)
+			else
+				break
+		}
+
+		return commands
 	}
 
-	override fun doInBackground(vararg params: Void?): Void? {
-		val d = _sub.recvStr(ZMQ.NOBLOCK)
-		if (d != null)
-			_commands.add(d)
-		return null
-	}
+	override fun onPostExecute(commands: MutableList<String>) {
+		super.onPostExecute(commands)
 
-	override fun onPostExecute(result: Void?) {
-		super.onPostExecute(result)
-
-		if (_commands.isNotEmpty()) {
-			_out.text = _commands[0]
-			_commands.clear()
+		if (commands.isNotEmpty()) {
+			delegate(commands[0])
 		}
 	}
-
-	private val _sub: ZMQ.Socket
-	private val _out: TextView
-	private var _commands = mutableListOf<String>()
 }
 
 class ZMQPublisherServer : Runnable {
@@ -69,15 +65,18 @@ class MainActivity : AppCompatActivity() {
 
 		val timerTask = object : TimerTask() {
 			override fun run() {
-				runOnUiThread { ZMQSubscriberTask(_sub, text).execute(null) }
+				runOnUiThread { ZMQSubscriberTask(this@MainActivity::setText).execute(_ctx) }
 			}
 		}
 
-		timer = Timer()
-		timer.schedule(timerTask, 0, 100)
+		_scheduler.schedule(timerTask, 0, 100)
+	}
+
+	fun setText(s: String) {
+		text.text = s
 	}
 
 	val _ctx = ZContext()
 	val _sub = _ctx.createSocket(ZMQ.SUB)
-	lateinit var timer: Timer
+	val _scheduler = Timer()
 }
