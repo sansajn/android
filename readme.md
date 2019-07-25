@@ -44,14 +44,12 @@ Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adre
 
 ![](images/tablayout.png "TabLayout sample screenshot.") ![](images/navigation_drawer.png "NavigationDrawer sample screenshot.")
 
+
 **Preferences** : ukážka dizajnu nastavení pomocou `PreferenceFragmentCompat` s fungujúcim summary.
-
-![](images/preferences.png "Preferences sample screenshot.")
-
 
 **EmptyListPlaceholder**: ukážka ako na placeholder view v prípade prázdneho ListView, tiež ukazuje ako použiť FrameLayout.
 
-![](images/empty_list_placeholder.png "EmptyListPlaceholder sample screenshot.")
+![](images/preferences.png "Preferences sample screenshot.") ![](images/empty_list_placeholder.png "EmptyListPlaceholder sample screenshot.")
 
 
 ## ndk:ukážky
