@@ -54,6 +54,9 @@ Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adre
 ![](images/preferences.png "Preferences sample screenshot.") ![](images/empty_list_placeholder.png "EmptyListPlaceholder sample screenshot.")
 
 
+**UiThreadAccessWithoutActivity** : ako spúštať kód v UI vlákne bez aktivity (`Activity.runOnUiThread()`).
+
+
 ## ndk:ukážky
 
 Ukážky predvádzajúce funkcionalitu JNI, dostupné v adresáry `jni`.
