@@ -59,8 +59,13 @@ Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adre
 
 ![](images/preferences.png "Preferences sample screenshot.") ![](images/empty_list_placeholder.png "EmptyListPlaceholder sample screenshot.") ![](images/recyclerview.png "RecyclerView sample screenshot.")
 
+
+
 **UiThreadAccessWithoutActivity**: ako spúštať kód v UI vlákne bez aktivity (`Activity.runOnUiThread()`).
 
+**HorizontalRecyclerView**: horizontálny `RecyclerView`
+
+![](images/horizontal_recyclerview.png "Horizontal Recycler View sample screenshot")
 
 
 
