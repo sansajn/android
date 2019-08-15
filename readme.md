@@ -15,11 +15,13 @@ Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adre
 ![](images/grid_view_small.png "GridView sample screenshot.") ![](images/list_view_small.png "ListView sample screenshot.") ![](images/table_layout_small.png "TableLayout sample screenshot.")
 
 
+
 **ImageView** : ukážka práce s `ImageView` komponentou.
 
 **SQLiteDatabase** : ukážka práce s SQLite databázou, aplykácia predvádza, ako spustiť aktyvitu a získať z nej dáta zadané užívateľom, ako vytvoriť menu, alebo aj ako použiť ListView.
 
 ![](images/image_view_small.png "ImageView sample screenshot.") ![](images/sqlite_database_small.png "SQLiteDatabase main activity sample screenshot.") ![](images/sqlite_database_edit_activity_small.png "SQLiteDatabase edit activity sample screenshot.")
+
 
 
 **AndroidPlot** : ukážka renderovania grafou (xy plot) pomocou knižnice androidplot
@@ -36,6 +38,7 @@ Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adre
 ![](images/combined_plot.png "fx plot sample screenshot.")
 
 
+
 **TabLayout** : použitie tabou a fragmentou v apke
 
 **JeromqPush** : ukážka použitia push-pull ZMQ soketou
@@ -47,14 +50,18 @@ Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adre
 ![](images/tablayout.png "TabLayout sample screenshot.") ![](images/navigation_drawer.png "NavigationDrawer sample screenshot.")
 
 
+
 **Preferences** : ukážka dizajnu nastavení pomocou `PreferenceFragmentCompat` s fungujúcim summary.
 
 **EmptyListPlaceholder**: ukážka ako na placeholder view v prípade prázdneho ListView, tiež ukazuje ako použiť FrameLayout.
 
-![](images/preferences.png "Preferences sample screenshot.") ![](images/empty_list_placeholder.png "EmptyListPlaceholder sample screenshot.")
+**RecyclerView**: použitie `RecyclerView` a `CardView` komponenty.
+
+![](images/preferences.png "Preferences sample screenshot.") ![](images/empty_list_placeholder.png "EmptyListPlaceholder sample screenshot.") ![](images/recyclerview.png "RecyclerView sample screenshot.")
+
+**UiThreadAccessWithoutActivity**: ako spúštať kód v UI vlákne bez aktivity (`Activity.runOnUiThread()`).
 
 
-**UiThreadAccessWithoutActivity** : ako spúštať kód v UI vlákne bez aktivity (`Activity.runOnUiThread()`).
 
 
 ## ndk:ukážky
