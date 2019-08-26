@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.list_layout.view.*
 
@@ -45,6 +46,7 @@ class CustomListAdapter(var c: Context, var list: List<String>) : RecyclerView.A
 	class Item(itemView: View) : RecyclerView.ViewHolder(itemView) {
 		fun bindData(item: String) {
 			itemView.textView.text = item
+			itemView.setOnClickListener { Toast.makeText(itemView.context, "item $item clicked", Toast.LENGTH_LONG).show() }
 		}
 	}
 }
