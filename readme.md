@@ -63,9 +63,13 @@ Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adre
 
 **UiThreadAccessWithoutActivity**: ako spúštať kód v UI vlákne bez aktivity (`Activity.runOnUiThread()`).
 
-**HorizontalRecyclerView**: horizontálny `RecyclerView`
+**HorizontalRecyclerView**: horizontálny `RecyclerView`.
 
-![](images/horizontal_recyclerview.png "Horizontal Recycler View sample screenshot")
+**RecyclerViewDragandDrop**: ako na drag&drop u `RecyclerView`.
+
+**RecyclerViewUpdate**: ukážka ako updateovať `RecyclerView` pri zmene zobrazovaných dát.
+
+![](images/horizontal_recyclerview.png "Horizontal Recycler View sample screenshot") ![](images/recyclerview_draganddrop.png "Recycler View Drag&Drop sample screenshot") ![](images/recyclerview_update.png "Recycler View update sample screenshot")
 
 
 
