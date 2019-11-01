@@ -72,6 +72,10 @@ Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adre
 ![](images/horizontal_recyclerview.png "Horizontal Recycler View sample screenshot") ![](images/recyclerview_draganddrop.png "Recycler View Drag&Drop sample screenshot") ![](images/recyclerview_update.png "Recycler View update sample screenshot")
 
 
+**CustomView**: ukážka užívateľsky definovanéj `View` komponenty a kreslenia do `Canvas` pomocou `Paint`
+
+
+![](images/custom_view.png "Custom View sample screenshot")
 
 ## ndk:ukážky
 
