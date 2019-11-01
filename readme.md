@@ -74,8 +74,10 @@ Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adre
 
 **CustomView**: ukážka užívateľsky definovanéj `View` komponenty a kreslenia do `Canvas` pomocou `Paint`
 
+**view/ViewUserInput**: ukážka implmentuje onTouchEvent() triedy View a na základe pohybu prstu po displeji mení pozíciu štvorca na displeji.
 
-![](images/custom_view.png "Custom View sample screenshot")
+
+![](images/custom_view.png "Custom View sample screenshot") ![](images/view_user_input.png "View User Input sample screenshot")
 
 ## ndk:ukážky
 
