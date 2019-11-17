@@ -76,8 +76,12 @@ Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adre
 
 **view/ViewUserInput**: ukážka implmentuje onTouchEvent() triedy View a na základe pohybu prstu po displeji mení pozíciu štvorca na displeji.
 
+**canvas/PictureBlending**: ukážka kompozície dvoch bitmap pomocou `PorterDuffXfermode` kompozitora. 
 
-![](images/custom_view.png "Custom View sample screenshot") ![](images/view_user_input.png "View User Input sample screenshot")
+
+
+
+![](images/custom_view.png "Custom View sample screenshot") ![](images/view_user_input.png "View User Input sample screenshot") ![](images/picture_blending.png "Picture blending sample screenshot")
 
 ## ndk:ukážky
 
