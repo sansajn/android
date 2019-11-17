@@ -78,10 +78,12 @@ Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adre
 
 **canvas/PictureBlending**: ukážka kompozície dvoch bitmap pomocou `PorterDuffXfermode` kompozitora. 
 
+**canvas/WaveBlending**: ukážka podfarbenia časového priebehu pomocou kompozitnej operácie ADD (`PorterDuff.Mode.ADD`). Čierny priebeh na priehľadnom pozadí zafarbený červenou (minulosť) a modrou (budúcnosť) farfou na základe pozície (v rozsahu 0 až 1.0).
 
 
 
-![](images/custom_view.png "Custom View sample screenshot") ![](images/view_user_input.png "View User Input sample screenshot") ![](images/picture_blending.png "Picture blending sample screenshot")
+
+![](images/custom_view.png "Custom View sample screenshot") ![](images/view_user_input.png "View User Input sample screenshot") ![](images/picture_blending.png "Picture blending sample screenshot") ![](images/wave_blending.png "Wave blending sample screenshot")
 
 ## ndk:ukážky
 
@@ -149,7 +151,6 @@ RecyclerViewGallery : RecyclerView with image sample
 **ndk/TwoSharedLibraries**: Použitie knižnice zo závislosťou na inej dynamickej knižnici.
 
 Pri loadovaní prvej *native-lib* knižnice systém zistí jej závislosť na druhej knižnici *b* a sám ju natiahne (netreba volať `System.LoadLibrary()`).
-
 
 **ndk/TwoSharedLibrariesInKotlin**: Použitie knižnice zo závislosťou na inej dynamickej knižnici v Kotline. Pozri popis `ndk/TwoSharedLibraries`.
 
