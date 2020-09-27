@@ -85,6 +85,10 @@ Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adre
 
 ![](images/custom_view.png "Custom View sample screenshot") ![](images/view_user_input.png "View User Input sample screenshot") ![](images/picture_blending.png "Picture blending sample screenshot") ![](images/wave_blending.png "Wave blending sample screenshot")
 
+
+**NotificationDemo**: Android 8 notifications sample
+**NotificationProgress**: Notification with progress bar sample based on `NotificationDemo` sample.
+
 ## ndk:ukážky
 
 Ukážky predvádzajúce funkcionalitu JNI, dostupné v adresáry `jni`.
