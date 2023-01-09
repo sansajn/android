@@ -1,10 +1,13 @@
 # Android
 
-Repozitár obsahuje kolekciu programou/ukážok predvádzajúcich použitie jednotlivých komponent systému Android.
+This repository contains Android samples for Kotlin and Java (from the past) languages.
 
-## kotlin:ukážky
+## kotlin:samples
 
-Ukážky predvádzajúce android funkcionalitu v jazyku kotlin, dostupné v adresáry `kotlin`.
+Kotlin language samples are saved in `kotlin` directory.
+
+**hellomap**: Mapbox's *Hello World* sample for Android SDK.
+![hellmap screenshot](kotlin/hellomap/hellomap.jpg)
 
 **GridView** : ukážka použitia `GridView` komponenty.
 
