@@ -58,6 +58,8 @@ Kotlin language samples are saved in `kotlin` directory.
 
 **EmptyListPlaceholder**: ukážka ako na placeholder view v prípade prázdneho ListView, tiež ukazuje ako použiť FrameLayout.
 
+**ExternalStorage**: The sample lists all photos from inside DCIM folder (usually /storage/emulated/0/DCIM) for Android 13+ which require runtime permission.
+
 **RecyclerView**: použitie `RecyclerView` a `CardView` komponenty.
 
 ![](images/preferences.png "Preferences sample screenshot.") ![](images/empty_list_placeholder.png "EmptyListPlaceholder sample screenshot.") ![](images/recyclerview.png "RecyclerView sample screenshot.")
