@@ -77,6 +77,10 @@ Kotlin language samples are saved in `kotlin` directory.
 ![](images/horizontal_recyclerview.png "Horizontal Recycler View sample screenshot") ![](images/recyclerview_draganddrop.png "Recycler View Drag&Drop sample screenshot") ![](images/recyclerview_update.png "Recycler View update sample screenshot")
 
 
+**SDCardDCIM**: Shows how to figure out image pathes stored in SD Card (not internal storage) via MediaStore API and list DCIM content from SD Card.
+
+> tested under Android 33 API
+
 **CustomView**: ukážka užívateľsky definovanéj `View` komponenty a kreslenia do `Canvas` pomocou `Paint`
 
 **view/ViewUserInput**: ukážka implmentuje onTouchEvent() triedy View a na základe pohybu prstu po displeji mení pozíciu štvorca na displeji.
