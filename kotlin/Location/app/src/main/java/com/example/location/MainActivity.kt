@@ -2,6 +2,8 @@ package com.example.location
 
 import android.os.Bundle
 import android.Manifest
+import android.content.pm.PackageManager
+import android.location.Location
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,9 +13,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.app.ActivityCompat
 import com.example.location.ui.theme.LocationTheme
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +40,7 @@ class MainActivity : ComponentActivity() {
 
 		// ask for location permissions
 		val locationPermissionRequest = registerForActivityResult(
-			ActivityResultContracts.RequestMultiplePermissions()
+			ActivityResultContracts.RequestMultiplePermissions()  // TODO: is this blocking or async?
 		) { permissions ->
 			when {
 				permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
@@ -52,15 +60,41 @@ class MainActivity : ComponentActivity() {
 			}
 		}
 
-// ...
+		// request for permissions if not already have them
+		if (ActivityCompat.checkSelfPermission(
+				this,
+				Manifest.permission.ACCESS_FINE_LOCATION
+			) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+				this,
+				Manifest.permission.ACCESS_COARSE_LOCATION
+			) != PackageManager.PERMISSION_GRANTED
+		) {
+			locationPermissionRequest.launch(arrayOf(
+				Manifest.permission.ACCESS_FINE_LOCATION,
+				Manifest.permission.ACCESS_COARSE_LOCATION))
+			return
+		}
+		else
+			Log.d(TAG,"already have required permissions")
 
-// Before you perform the actual permission request, check whether your app
-// already has the permissions, and whether your app needs to show a permission
-// rationale dialog. For more details, see Request permissions.
-		locationPermissionRequest.launch(arrayOf(
-			Manifest.permission.ACCESS_FINE_LOCATION,
-			Manifest.permission.ACCESS_COARSE_LOCATION))
+		// this will only run in case of permission granted TODO: needs to be refactored (not working for a first time when we do not have permissions yet)
+		locationClient = LocationServices.getFusedLocationProviderClient(this)
+		locationClient.lastLocation
+			.addOnSuccessListener { location : Location? ->
+				if (location == null) {
+					Log.d(TAG, "No last known location. Try fetching the current location first")
+				} else {
+					Log.d(TAG, "Current location is \n" + "lat : ${location.latitude}\n" +
+							"long : ${location.longitude}\n" + "fetched at ${System.currentTimeMillis()}")
+				}
+			}
+	}
 
+	// last known location
+	private lateinit var locationClient: FusedLocationProviderClient
+
+	companion object {
+		val TAG = "Location"
 	}
 }
 
