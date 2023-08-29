@@ -20,6 +20,8 @@ import androidx.core.app.ActivityCompat
 import com.example.location.ui.theme.LocationTheme
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
+import com.google.android.gms.tasks.CancellationTokenSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -82,9 +84,19 @@ class MainActivity : ComponentActivity() {
 		locationClient.lastLocation
 			.addOnSuccessListener { location : Location? ->
 				if (location == null) {
-					Log.d(TAG, "No last known location. Try fetching the current location first")
+					Log.d(TAG, "No last known location. Fetching the current location ...")
+
+					val locationResult = locationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, CancellationTokenSource().token)
+					locationResult.addOnSuccessListener { location : Location? ->
+						if (location != null) {
+							Log.d(TAG, "Current location is \n" + "lat : ${location.latitude}\n" +
+									"long : ${location.longitude}\n" + "fetched at ${System.currentTimeMillis()}")
+						}
+						else
+							Log.d(TAG, "No current/last known location.")
+					}
 				} else {
-					Log.d(TAG, "Current location is \n" + "lat : ${location.latitude}\n" +
+					Log.d(TAG, "Current (last) location is \n" + "lat : ${location.latitude}\n" +
 							"long : ${location.longitude}\n" + "fetched at ${System.currentTimeMillis()}")
 				}
 			}
