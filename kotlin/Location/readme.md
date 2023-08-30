@@ -15,7 +15,7 @@ References:
 
 To simulate location in AVD
 
-- go to Settings > Location
+- go to *Settings* > *Location* for AVD
 - select some position by clicking on map and press *Save Point*
 ![Save Point](images/avd_save_point.jpg)
 - select point from *Saved Points* ist and click to *Set Location* button
@@ -31,4 +31,9 @@ fetched at 1693322851095
 ```
 
 message.
+
+To simulate route 
+
+- click to *Routes* tab in *Settings* > *Location* for AVD
+- select two points and click to *Start Route* button
 
