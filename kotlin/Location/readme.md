@@ -4,7 +4,7 @@ Access GPS location sample for Android 13.
 
 We ask for current and last location in `onCreate()` function the sample.
 
-For regular location updates see `X` function.
+For regular location updates see `startLocationUpdates()` function.
 
 References:
 - [Request location permissions](https://developer.android.com/training/location/permissions)
