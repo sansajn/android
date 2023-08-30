@@ -2,9 +2,18 @@
 
 Access GPS location sample for Android 13.
 
-[Request location permissions](https://developer.android.com/training/location/permissions)
+We ask for current and last location in `onCreate()` function the sample.
 
-To simulate location in AVD 
+For regular location updates see `X` function.
+
+References:
+- [Request location permissions](https://developer.android.com/training/location/permissions)
+- [Request location updates](https://developer.android.com/training/location/request-updates)
+
+
+## Simulation
+
+To simulate location in AVD
 
 - go to Settings > Location
 - select some position by clicking on map and press *Save Point*
@@ -12,7 +21,7 @@ To simulate location in AVD
 - select point from *Saved Points* ist and click to *Set Location* button
 ![Set Location](images/avd_set_location.jpg)
 
-now run *Location* sample and in Logcat you should see
+now run *Location* sample and in *Logcat* you should see
 
 ```
 Current (last) location is 
@@ -21,5 +30,5 @@ long : 14.4378
 fetched at 1693322851095
 ```
 
-message
+message.
 
