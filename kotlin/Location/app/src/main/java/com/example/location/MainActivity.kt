@@ -41,69 +41,72 @@ class MainActivity : ComponentActivity() {
 			}
 		}
 
+		if (haveLocationPermissions())
+			requestLocations()
+		else
+			askLocationPermissions()
+	}
+
+	private fun requestLocations() {
+		locationClient = LocationServices.getFusedLocationProviderClient(this)
+		requestLastLocation()
+		startLocationUpdates()  // regular location updates
+	}
+
+	private fun askLocationPermissions() {
 		// ask for location permissions
 		val locationPermissionRequest = registerForActivityResult(
-			ActivityResultContracts.RequestMultiplePermissions()  // TODO: is this blocking or async?
+			ActivityResultContracts.RequestMultiplePermissions()
 		) { permissions ->
 			when {
 				permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
 					// Precise location access granted.
 					Log.d("Location", "ACCESS_FINE_LOCATION granted")
+					requestLocations()
 				}
 				permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
 					// Only approximate location access granted.
 					Log.d("Location", "ACCESS_COARSE_LOCATION granted")
+					requestLocations()
 				}
 				permissions.getOrDefault(Manifest.permission.ACCESS_BACKGROUND_LOCATION, false) -> {
 					Log.d("Location", "ACCESS_BACKGROUND_LOCATION granted")
+					requestLocations()
 				}
 				else -> {
-					// No location access granted.
+					Log.d(TAG, "Location permission not granted (dam user :()")
 				}
 			}
 		}
 
-		// request for permissions if not already have them
-		if (ActivityCompat.checkSelfPermission(
-				this,
-				Manifest.permission.ACCESS_FINE_LOCATION
-			) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-				this,
-				Manifest.permission.ACCESS_COARSE_LOCATION
-			) != PackageManager.PERMISSION_GRANTED
-		) {
-			locationPermissionRequest.launch(arrayOf(
-				Manifest.permission.ACCESS_FINE_LOCATION,
-				Manifest.permission.ACCESS_COARSE_LOCATION))
-			return
-		}
-		else
-			Log.d(TAG,"already have required permissions")
-
-		// this will only run in case of permission granted TODO: needs to be refactored (not working for a first time when we do not have permissions yet)
-		val locationClient = LocationServices.getFusedLocationProviderClient(this)
-		requestLastLocation(locationClient)
-
-		startLocationUpdates(locationClient)  // regular location updates
+		locationPermissionRequest.launch(arrayOf(
+			Manifest.permission.ACCESS_FINE_LOCATION,
+			Manifest.permission.ACCESS_COARSE_LOCATION))
 	}
 
 // regular location updates
 
-	private fun startLocationUpdates(locationClient: FusedLocationProviderClient) {
-		val locationCallback = object : LocationCallback() {
-			override fun onLocationResult(locationResult: LocationResult) {
-				for (location in locationResult.locations) {
-					// TODO: add location counter
-					Log.d(TAG, "Location is \n" + "lat : ${location.latitude}\n" +
-							"long : ${location.longitude}\n" + "fetched at ${System.currentTimeMillis()}")
-				}
+	override fun onPause() {
+		super.onPause()
+		stopLocationUpdates()
+	}
+
+	private val locationCallback = object : LocationCallback() {
+		override fun onLocationResult(locationResult: LocationResult) {
+			for ((idx, location) in locationResult.locations.withIndex()) {
+				Log.d(TAG, "Location ${idx+1}. is\n" + "lat : ${location.latitude}\n" +
+					"long : ${location.longitude}\n" + "fetched at ${System.currentTimeMillis()}")
 			}
 		}
+	}
 
+	private fun startLocationUpdates() {
 		locationClient.requestLocationUpdates(createLocationRequest(), locationCallback , Looper.getMainLooper())
 	}
 
-	// TODO: stopLocationUpdates()
+	private fun stopLocationUpdates() {
+		locationClient.removeLocationUpdates(locationCallback)
+	}
 
 	private fun createLocationRequest(): LocationRequest {
 		return LocationRequest.Builder(LocationRequest.PRIORITY_HIGH_ACCURACY, 10000)
@@ -112,12 +115,12 @@ class MainActivity : ComponentActivity() {
 	}
 
 // request location for a single time
-	private fun requestLastLocation(locationClient: FusedLocationProviderClient) {
+	private fun requestLastLocation() {
 		locationClient.lastLocation
 			.addOnSuccessListener { location : Location? ->
 				if (location == null) {
 					Log.d(TAG, "No last known location. Fetching the current location ...")
-					requestCurrentLocation(locationClient)
+					requestCurrentLocation()
 				} else {
 					Log.d(TAG, "Current (last) location is \n" + "lat : ${location.latitude}\n" +
 							"long : ${location.longitude}\n" + "fetched at ${System.currentTimeMillis()}")
@@ -125,7 +128,7 @@ class MainActivity : ComponentActivity() {
 			}
 	}
 
-	private fun requestCurrentLocation(locationClient: FusedLocationProviderClient) {
+	private fun requestCurrentLocation() {
 		val locationResult = locationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, CancellationTokenSource().token)
 		locationResult.addOnSuccessListener { location: Location? ->
 			if (location != null) {
@@ -136,9 +139,14 @@ class MainActivity : ComponentActivity() {
 		}
 	}
 
+	private fun haveLocationPermissions(): Boolean = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+			|| ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+
 	companion object {
 		val TAG = "Location"
 	}
+
+	private lateinit var locationClient:  FusedLocationProviderClient
 }
 
 @Composable
