@@ -1,13 +1,10 @@
 # Android
 
-This repository contains Android samples for Kotlin and Java (from the past) languages.
+This repository contains Android samples for Kotlin and Java (now considered as secondclass citizen in Android ecosystem) languages.
 
 ## kotlin:samples
 
 Kotlin language samples are saved in `kotlin` directory.
-
-**hellomap**: Mapbox's *Hello World* sample for Android SDK.
-![hellmap screenshot](kotlin/hellomap/hellomap.jpg)
 
 **GridView** : ukážka použitia `GridView` komponenty.
 
@@ -18,13 +15,11 @@ Kotlin language samples are saved in `kotlin` directory.
 ![](images/grid_view_small.png "GridView sample screenshot.") ![](images/list_view_small.png "ListView sample screenshot.") ![](images/table_layout_small.png "TableLayout sample screenshot.")
 
 
-
 **ImageView** : ukážka práce s `ImageView` komponentou.
 
 **SQLiteDatabase** : ukážka práce s SQLite databázou, aplykácia predvádza, ako spustiť aktyvitu a získať z nej dáta zadané užívateľom, ako vytvoriť menu, alebo aj ako použiť ListView.
 
 ![](images/image_view_small.png "ImageView sample screenshot.") ![](images/sqlite_database_small.png "SQLiteDatabase main activity sample screenshot.") ![](images/sqlite_database_edit_activity_small.png "SQLiteDatabase edit activity sample screenshot.")
-
 
 
 **AndroidPlot** : ukážka renderovania grafou (xy plot) pomocou knižnice androidplot
@@ -98,7 +93,19 @@ Kotlin language samples are saved in `kotlin` directory.
 **NotificationDemo**: Android 8 notifications sample
 **NotificationProgress**: Notification with progress bar sample based on `NotificationDemo` sample.
 
-## ndk:ukážky
+### Mapbox
+
+Directory `mapbox` with Mapbox's API samples for working with maps.
+
+**hellomap**: Mapbox's *Hello World* sample for Android SDK.
+![hellmap screenshot](kotlin/mapbox/hellomap/hellomap.jpg)
+
+**marker**: Mapbox's marker sample for Android SDK.
+
+
+
+
+## ndk:samples
 
 Ukážky predvádzajúce funkcionalitu JNI, dostupné v adresáry `jni`.
 
@@ -141,7 +148,7 @@ ndk/Bullet : streľba kociek voči stene v bullet-e
 ndk/CustomNative
 
 
-## java:ukážky (muzeum)
+## java:samples (museum)
 
 Lifecycle
 

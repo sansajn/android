@@ -1,3 +1,3 @@
 The directory contains following [mapbox](https://www.mapbox.com/) samples
 
-- `hellomap`: Mapbox *Hello World*.
+for sample descriprions please see root `readme.md` file
