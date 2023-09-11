@@ -2,9 +2,9 @@
 
 This repository contains Android samples for Kotlin and Java (now considered as secondclass citizen in Android ecosystem) languages.
 
-## kotlin:samples
+# Kotlin
 
-Kotlin language samples are saved in `kotlin` directory.
+Kotlin language samples are saved in `kotlin` directory and contains following samples
 
 **GridView** : ukážka použitia `GridView` komponenty.
 
@@ -93,19 +93,46 @@ Kotlin language samples are saved in `kotlin` directory.
 **NotificationDemo**: Android 8 notifications sample
 **NotificationProgress**: Notification with progress bar sample based on `NotificationDemo` sample.
 
-### Mapbox
 
-Directory `mapbox` with Mapbox's API samples for working with maps.
+## Mapbox
+
+Directory `mapbox` with [Mapbox's](https://www.mapbox.com/) API samples for working with maps. 
+
+To get Mapbox samples working we need to configue secret an public tokens first. For secret token 
+
+- Open (or create) `~/.gradle/gradle.properties`
+- define `MAPBOX_DOWNLOADS_TOKEN` variable with access token this way
+
+```
+MAPBOX_DOWNLOADS_TOKEN=YOUR_SECRET_MAPBOX_ACCESS_TOKEN
+```
+
+> for access token, create Mapbox account, then go to *Tokens* section and create token with `Downloads:Read` checked in a *Secret* section.
+
+Then to configure pulic token 
+
+- create dedicated public token for sample in Mapbox account
+- define `mapbox_access_token` in `res/values/strings.xml` file this way
+
+```xml
+<string name="mapbox_access_token">pk.eyJ9IjoiYWRhbS6obGF2YXRvdmljIiwiUFV6ImNsY291Z3IwMzAyM2MzcHF5dmZ3b3J3OW8ifQ.Dn3oDvBJKVHgOKYcpeZyVA</string>
+```
+
+> **note**: replace token with real token for `mapbox_access_token`
+
+### Samples
 
 **hellomap**: Mapbox's *Hello World* sample for Android SDK.
 ![hellmap screenshot](kotlin/mapbox/hellomap/hellomap.jpg)
 
 **marker**: Mapbox's marker sample for Android SDK.
 
+**location**: Mapbox's location sample for Android SDK. Shows how to show current user (GPS) location on map.
+![location screenshot](kotlin/mapbox/location/location.jpg)
 
+> Tested for Android 13
 
-
-## ndk:samples
+# NDK
 
 Ukážky predvádzajúce funkcionalitu JNI, dostupné v adresáry `jni`.
 
@@ -148,7 +175,11 @@ ndk/Bullet : streľba kociek voči stene v bullet-e
 ndk/CustomNative
 
 
-## java:samples (museum)
+# Java
+
+Java language samples.
+
+> **note**: Java language become second class citizen in Android development workflow and so samples are considered as obsolete prior to Kotlin samples
 
 Lifecycle
 

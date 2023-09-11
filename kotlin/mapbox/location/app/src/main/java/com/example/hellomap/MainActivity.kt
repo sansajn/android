@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity() {
 		setContentView(binding.root)
 
 		_mapView = binding.mapView
-		//_mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS)
 
 		_locationPermissionHelper = LocationPermissionHelper(WeakReference(this))
 		_locationPermissionHelper.checkPermissions {
